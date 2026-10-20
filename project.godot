@@ -30,6 +30,7 @@ directories/dch_directory={
 "characters/Testemunha": "res://game/dialogic/characters/Testemunha/Testemunha.dch"
 }
 directories/dtl_directory={
+"office_door_locked": "res://game/dialogic/timelines/office_door_locked.dtl",
 "timeline_1": "res://game/dialogic/timelines/timeline_1.dtl",
 "timeline_2": "res://game/dialogic/timelines/timeline_2.dtl"
 }

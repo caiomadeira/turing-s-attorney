@@ -25,10 +25,13 @@ O ponteiro do mouse é a imagem em `display/mouse_cursor/custom_image` do `proje
 | [SceneRouter](#scenerouter) | `Node` | Troca de local |
 | [DialogueDirector](#dialoguedirector) | `Node` | Timelines e sinais do Dialogic |
 | [ItemData](#itemdata) | `Resource` | Definição de um item |
+| [PassageLock](#passagelock) | `Resource` | Condição para atravessar uma saída |
+| [ItemLock](#itemlock) | `PassageLock` | Passagem que exige um item |
 | [Location](#location) | `Control` | Raiz de um local |
 | [Interaction](#interaction) | `Button` | Troca o cursor ao passar o ponteiro |
 | [Hotspot](#hotspot) | `Interaction` | Objeto clicável que abre uma timeline |
-| [ExitArrow](#exitarrow) | `Interaction` | Seta para outro local |
+| [SceneExit](#sceneexit) | `Interaction` | Saída para outro local |
+| [ExitArrow](#exitarrow) | `SceneExit` | Seta para outro local |
 | [InventoryPanel](#inventorypanel) | `Control` | Painel do inventário |
 | [ItemToast](#itemtoast) | `PanelContainer` | Aviso de item adquirido |
 
@@ -230,7 +233,7 @@ Na troca, cada filho do host é removido e liberado, e a cena nova é instanciad
 
 Gera um erro quando o host ainda não foi registrado, quando o arquivo não existe, ou quando o recurso não é uma `PackedScene`.
 
-`ExitArrow` chama este método no clique. O sinal `change_scene` de uma timeline também chega aqui, depois que a timeline termina. Veja `DialogueDirector`.
+`SceneExit` chama este método no clique, quando a passagem está aberta. O sinal `change_scene` de uma timeline também chega aqui, depois que a timeline termina, sem consultar a trava. Veja `DialogueDirector`.
 
 ---
 
@@ -303,7 +306,7 @@ Emitido quando a timeline que este diretor abriu termina. Se havia um `change_sc
 
 ### bool is_running = false
 
-`true` do `start()` bem-sucedido até `timeline_ended`. `Hotspot`, `ExitArrow` e `Location` leem esta propriedade para ignorar cliques.
+`true` do `start()` bem-sucedido até `timeline_ended`. `Hotspot`, `SceneExit` e `Location` leem esta propriedade para ignorar cliques.
 
 ---
 
@@ -360,6 +363,84 @@ Texto do detalhe, quando o jogador seleciona o item no `InventoryPanel`.
 
 ---
 
+# PassageLock
+
+**Herda:** [Resource](https://docs.godotengine.org/en/stable/classes/class_resource.html) **<** [RefCounted](https://docs.godotengine.org/en/stable/classes/class_refcounted.html) **<** [Object](https://docs.godotengine.org/en/stable/classes/class_object.html)
+
+**Script:** `res://game/resources/passage_lock.gd`
+
+Condição para atravessar uma saída.
+
+## Descrição
+
+`SceneExit` guarda um recurso desta classe em `lock`. Sem recurso, a passagem está livre. Uma subclasse devolve `false` em `is_open()` enquanto a condição falta.
+
+O recurso fica no inspetor do nó. O export tipado como `PassageLock` lista esta classe e as subclasses, como `ItemLock`. `class_name` registra a classe para o editor criar o recurso no próprio nó.
+
+A trava não esconde a saída e não desativa o botão. `required_flag` continua sendo a regra que torna a área invisível. Uma porta fechada permanece clicável; o clique recusa a viagem.
+
+`SceneRouter.go_to()` não lê esta classe. Uma timeline com `change_scene` troca de local mesmo com a trava fechada.
+
+## Métodos
+
+| Tipo de retorno | Método |
+| --- | --- |
+| bool | is_open() |
+
+---
+
+## Descrições dos métodos
+
+### bool is_open()
+
+Devolve `true` quando a passagem pode ser usada. Nesta classe, o retorno é sempre `true`.
+
+---
+
+# ItemLock
+
+**Herda:** [PassageLock](#passagelock) **<** [Resource](https://docs.godotengine.org/en/stable/classes/class_resource.html) **<** [RefCounted](https://docs.godotengine.org/en/stable/classes/class_refcounted.html) **<** [Object](https://docs.godotengine.org/en/stable/classes/class_object.html)
+
+**Script:** `res://game/resources/item_lock.gd`
+
+Passagem que só abre com um item do inventário.
+
+## Descrição
+
+`is_open()` devolve `Inventory.has(item_id)`. O item continua com o jogador: atravessar não chama `Inventory.remove()`.
+
+Um `item_id` vazio deixa a passagem aberta.
+
+## Propriedades
+
+| Tipo | Propriedade | Valor padrão |
+| --- | --- | --- |
+| String | item_id | `""` |
+
+## Métodos
+
+| Tipo de retorno | Método |
+| --- | --- |
+| bool | is_open() |
+
+---
+
+## Descrições das propriedades
+
+### String item_id = ""
+
+Id do catálogo, o mesmo de `Inventory.has()` e `give_item`. Vazio, `is_open()` devolve `true`.
+
+---
+
+## Descrições dos métodos
+
+### bool is_open()
+
+Devolve `true` quando `item_id` está vazio ou o jogador carrega esse item.
+
+---
+
 # Location
 
 **Herda:** [Control](https://docs.godotengine.org/en/stable/classes/class_control.html) **<** [CanvasItem](https://docs.godotengine.org/en/stable/classes/class_canvasitem.html) **<** [Node](https://docs.godotengine.org/en/stable/classes/class_node.html) **<** [Object](https://docs.godotengine.org/en/stable/classes/class_object.html)
@@ -370,11 +451,27 @@ Raiz de cada cena em `res://game/scenes/locations/`.
 
 ## Descrição
 
-No `_ready`, estica o controle para preencher o host (`Control.PRESET_FULL_RECT`) e escuta `dialogue_started` e `dialogue_finished`.
+No `_ready`, estica o controle para preencher o host (`Control.PRESET_FULL_RECT`) e escuta `dialogue_started` e `dialogue_finished`. Se o nó do grupo `note_viewer` já está na árvore, também escuta `opened` e `closed`.
 
-A cada um desses sinais, percorre os `BaseButton` descendentes. Quem tem `refresh_state()` se atualiza sozinho. Os demais ficam com `disabled` igual a `DialogueDirector.is_running`.
+A cada um desses sinais, percorre os `BaseButton` descendentes. Quem tem `refresh_state()` se atualiza sozinho. Os demais ficam com `disabled` igual a `DialogueDirector.is_running`. Se `is_input_locked()` for verdadeiro, todo botão fica desativado.
 
-Um local novo reutiliza este script na raiz. A saída para outra cena é uma `ExitArrow` filha, com `target_scene` apontando para o `.tscn` do outro local.
+Um local novo reutiliza este script na raiz. A saída para outra cena é um `SceneExit` filho, com `target_scene` apontando para o `.tscn` do outro local. `ExitArrow` é essa saída com uma seta.
+
+## Métodos
+
+| Tipo de retorno | Método |
+| --- | --- |
+| bool | is_input_locked(tree: SceneTree) |
+
+---
+
+## Descrições dos métodos
+
+### bool is_input_locked(tree: SceneTree)
+
+Método estático. Devolve `true` quando `DialogueDirector.is_running` é `true`, ou quando o nó do grupo `note_viewer` está visível. Com `tree` nulo e sem diálogo, devolve `false`.
+
+`SceneExit.refresh_state()` usa este método. Ganhar um item atualiza a saída sem reativar o botão enquanto a nota está aberta.
 
 ---
 
@@ -388,7 +485,7 @@ Botão que troca o cursor do mouse enquanto o ponteiro está em cima.
 
 ## Descrição
 
-`Hotspot` e `ExitArrow` herdam esta classe. `Hotspot` usa a troca de cursor; `ExitArrow` sobrescreve esse comportamento para manter o cursor padrão e desenhar sua seta no próprio botão.
+`Hotspot` e `SceneExit` herdam esta classe. `ExitArrow` herda `SceneExit`. `Hotspot` usa a troca de cursor; `ExitArrow` sobrescreve esse comportamento para manter o cursor padrão e desenhar sua seta no próprio botão.
 
 Com o ponteiro em cima, e o botão ativo, o cursor passa a ser `icon_texture`, redimensionado para `proportions` com filtro nearest. O ponto de clique é `hotspot`, em pixels da textura original, escalado na mesma proporção. Nada é desenhado sobre o botão. Com o botão desativado, ou sem textura, o cursor volta à seta do projeto.
 
@@ -497,19 +594,21 @@ Atualiza `visible` e `disabled` a partir de `required_flag`, `one_shot` e `Dialo
 
 ---
 
-# ExitArrow
+# SceneExit
 
 **Herda:** [Interaction](#interaction) **<** [Button](https://docs.godotengine.org/en/stable/classes/class_button.html) **<** [BaseButton](https://docs.godotengine.org/en/stable/classes/class_basebutton.html) **<** [Control](https://docs.godotengine.org/en/stable/classes/class_control.html) **<** [CanvasItem](https://docs.godotengine.org/en/stable/classes/class_canvasitem.html) **<** [Node](https://docs.godotengine.org/en/stable/classes/class_node.html) **<** [Object](https://docs.godotengine.org/en/stable/classes/class_object.html)
 
-**Script:** `res://game/scripts/exit_arrow.gd`
+**Script:** `res://game/scripts/scene_exit.gd`
 
-Área de saída que mostra uma seta e troca de local.
+Área que troca de local.
 
 ## Descrição
 
-O botão nasce sem caixa e sem texto (`flat`, estilos vazios, `focus_mode` em `FOCUS_NONE`). Ao passar o mouse sobre a área, a seta aparece centralizada no botão; `direction` escolhe para onde ela aponta. O cursor permanece a seta padrão do projeto. Qualquer clique nessa área chama `SceneRouter.go_to(target_scene)`.
+O clique chama `SceneRouter.go_to(target_scene)` quando a passagem está aberta. `required_flag` e `lock` são regras diferentes. A flag ausente esconde a área e desativa o botão. A trava fechada deixa a área visível e habilitada: um botão desativado não emite `pressed`, e a porta precisa receber o clique para recusar.
 
-Durante o diálogo, o clique é ignorado. Enquanto `required_flag` falta, a área inteira fica invisível.
+Com a trava fechada, o clique chama `_on_locked()`. Se `locked_timeline` estiver preenchida, esse método abre a timeline. Vazia, o clique não faz nada. Uma porta futura estende esta classe, desenha o asset e sobrescreve `_on_locked()`; chamar o método da base preserva a timeline.
+
+Durante o diálogo, ou com o leitor de notas visível, o clique não viaja. `refresh_state()` também escuta `Inventory.changed`, para o desenho acompanhar o item sem reativar o botão enquanto a nota está aberta.
 
 ## Propriedades
 
@@ -517,13 +616,74 @@ Durante o diálogo, o clique é ignorado. Enquanto `required_flag` falta, a áre
 | --- | --- | --- |
 | String | target_scene | `""` |
 | String | required_flag | `""` |
-| Direction | direction | `Direction.RIGHT` |
+| PassageLock | lock | `null` |
+| String | locked_timeline | `""` |
 
 ## Métodos
 
 | Tipo de retorno | Método |
 | --- | --- |
+| bool | is_passage_open() |
 | void | refresh_state() |
+| void | _on_locked() |
+
+---
+
+## Descrições das propriedades
+
+### String target_scene = ""
+
+Cena aberta no clique, passada a `SceneRouter.go_to()`. O export aceita arquivos `*.tscn`.
+
+### String required_flag = ""
+
+Enquanto `GameState` não tiver esta flag, a área fica invisível e desativada. Vazia, a área nasce visível. Isto não é a trava da porta.
+
+### PassageLock lock = null
+
+Condição para atravessar. `null`, ou `is_open()` verdadeiro, libera `SceneRouter.go_to()`. Fechada, a área continua clicável.
+
+### String locked_timeline = ""
+
+Timeline de `DialogueDirector.start()` quando o clique encontra a trava fechada. O export aceita arquivos `*.dtl`. Vazia, a recusa é silenciosa.
+
+---
+
+## Descrições dos métodos
+
+### bool is_passage_open()
+
+Devolve `true` quando `lock` é `null` ou `lock.is_open()` é `true`.
+
+### void refresh_state()
+
+Atualiza `visible` e `disabled` a partir de `required_flag` e `Location.is_input_locked()`. A trava não entra nesse cálculo.
+
+`Location` chama este método quando o diálogo ou a nota abrem ou fecham. A saída também chama, no `_ready`, em `GameState.flag_changed` e em `Inventory.changed`.
+
+### void _on_locked()
+
+Roda no clique com a passagem fechada. Abre `locked_timeline` quando o caminho não está vazio. Uma subclasse que substituir este método chama a base para manter essa timeline.
+
+---
+
+# ExitArrow
+
+**Herda:** [SceneExit](#sceneexit) **<** [Interaction](#interaction) **<** [Button](https://docs.godotengine.org/en/stable/classes/class_button.html) **<** [BaseButton](https://docs.godotengine.org/en/stable/classes/class_basebutton.html) **<** [Control](https://docs.godotengine.org/en/stable/classes/class_control.html) **<** [CanvasItem](https://docs.godotengine.org/en/stable/classes/class_canvasitem.html) **<** [Node](https://docs.godotengine.org/en/stable/classes/class_node.html) **<** [Object](https://docs.godotengine.org/en/stable/classes/class_object.html)
+
+**Script:** `res://game/scripts/exit_arrow.gd`
+
+Seta sobre uma `SceneExit`.
+
+## Descrição
+
+O botão nasce sem caixa e sem texto (`flat`, estilos vazios, `focus_mode` em `FOCUS_NONE`). Ao passar o mouse sobre a área, a seta aparece centralizada no botão; `direction` escolhe para onde ela aponta. O cursor permanece a seta padrão do projeto. O clique, a flag e a trava ficam em `SceneExit`.
+
+## Propriedades
+
+| Tipo | Propriedade | Valor padrão |
+| --- | --- | --- |
+| Direction | direction | `Direction.RIGHT` |
 
 ## Enumerações
 
@@ -548,27 +708,9 @@ Durante o diálogo, o clique é ignorado. Enquanto `required_flag` falta, a áre
 
 ## Descrições das propriedades
 
-### String target_scene = ""
-
-Cena aberta no clique, passada a `SceneRouter.go_to()`. O export aceita arquivos `*.tscn`.
-
-### String required_flag = ""
-
-Enquanto `GameState` não tiver esta flag, a área fica invisível e desativada. Vazia, a área nasce disponível.
-
 ### Direction direction = Direction.RIGHT
 
 Lado para o qual aponta a seta exibida no centro do botão durante o hover.
-
----
-
-## Descrições dos métodos
-
-### void refresh_state()
-
-Atualiza `visible` e `disabled` a partir de `required_flag` e `DialogueDirector.is_running`.
-
-`Location` chama este método quando o diálogo abre ou fecha. A seta também chama, no `_ready` e em `GameState.flag_changed`.
 
 ---
 

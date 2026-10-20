@@ -13,7 +13,7 @@ func _ready() -> void:
 
 
 func _refresh_input() -> void:
-	var locked := _input_locked()
+	var locked := is_input_locked(get_tree())
 	for node in find_children("*", "BaseButton", true, false):
 		if node.has_method("refresh_state"):
 			node.refresh_state()
@@ -25,8 +25,10 @@ func _refresh_input() -> void:
 				node._update_cursor()
 
 
-func _input_locked() -> bool:
+static func is_input_locked(tree: SceneTree) -> bool:
 	if DialogueDirector.is_running:
 		return true
-	var viewer := get_tree().get_first_node_in_group(&"note_viewer")
+	if tree == null:
+		return false
+	var viewer := tree.get_first_node_in_group(&"note_viewer")
 	return viewer != null and viewer.visible

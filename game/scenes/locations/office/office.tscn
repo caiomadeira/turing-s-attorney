@@ -8,6 +8,11 @@
 [ext_resource type="Script" path="res://game/scripts/note_interaction.gd" id="6_note"]
 [ext_resource type="Script" path="res://game/resources/note_page.gd" id="7_page"]
 [ext_resource type="Texture2D" path="res://game/ui/notes/paper_generic.svg" id="8_paper"]
+[ext_resource type="Script" path="res://game/resources/item_lock.gd" id="9_lock"]
+
+[sub_resource type="Resource" id="Resource_keylock"]
+script = ExtResource("9_lock")
+item_id = "office_key"
 
 [sub_resource type="Resource" id="Resource_page1"]
 script = ExtResource("7_page")
@@ -73,3 +78,5 @@ grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("5_cggst")
 target_scene = "uid://cmbol2lbxswik"
+lock = SubResource("Resource_keylock")
+locked_timeline = "res://game/dialogic/timelines/office_door_locked.dtl"

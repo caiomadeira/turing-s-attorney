@@ -1,3 +1,5 @@
 join Pericles/Pericles left
 Pericles/Pericles: Meu distintivo, vou leva-lo comigo.
 [signal arg="give_item:attorneys_badge"]
+Pericles/Pericles: A chave do escritório estava na mesa. Vou levá-la.
+[signal arg="give_item:office_key"]
