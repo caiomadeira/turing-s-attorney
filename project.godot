@@ -88,6 +88,10 @@ mouse_cursor/custom_image_hotspot=Vector2(10, 6)
 window/size/min_width=1280
 window/size/min_height=720
 
+[dotnet]
+
+project/assembly_name="Turing-s Attorney"
+
 [editor]
 
 version_control/plugin_name="GitPlugin"

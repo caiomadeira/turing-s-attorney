@@ -5,6 +5,19 @@
 [ext_resource type="Script" uid="uid://sqisom7qbg0p" path="res://game/scripts/hotspot.gd" id="3_0c8c6"]
 [ext_resource type="Texture2D" uid="uid://ldftq0bewmhk" path="res://assets/kenney_cursor-pack/PNG/Outline/Default/gauntlet_open.png" id="4_mt8l5"]
 [ext_resource type="Script" uid="uid://nvjkgra5sq1n" path="res://game/scripts/exit_arrow.gd" id="5_cggst"]
+[ext_resource type="Script" path="res://game/scripts/note_interaction.gd" id="6_note"]
+[ext_resource type="Script" path="res://game/resources/note_page.gd" id="7_page"]
+[ext_resource type="Texture2D" path="res://game/ui/notes/paper_generic.svg" id="8_paper"]
+
+[sub_resource type="Resource" id="Resource_page1"]
+script = ExtResource("7_page")
+texture = ExtResource("8_paper")
+text = "A testemunha chegou antes do escritório abrir. O relógio da recepção ainda precisa ser conferido."
+
+[sub_resource type="Resource" id="Resource_page2"]
+script = ExtResource("7_page")
+texture = ExtResource("8_paper")
+text = "Na segunda folha só há esta linha. O resto ficou em branco."
 
 [node name="Office" type="Control" unique_id=409360025]
 layout_mode = 3
@@ -29,6 +42,19 @@ offset_right = 995.0
 offset_bottom = 595.0
 script = ExtResource("3_0c8c6")
 timeline = "uid://clhjbh7yv2d8k"
+icon_texture = ExtResource("4_mt8l5")
+proportions = Vector2(32, 32)
+hotspot = Vector2(9, 4)
+
+[node name="DeskNote" type="Button" parent="."]
+layout_mode = 1
+offset_left = 408.0
+offset_top = 468.0
+offset_right = 520.0
+offset_bottom = 580.0
+text = ""
+script = ExtResource("6_note")
+pages = Array[ExtResource("7_page")]([SubResource("Resource_page1"), SubResource("Resource_page2")])
 icon_texture = ExtResource("4_mt8l5")
 proportions = Vector2(32, 32)
 hotspot = Vector2(9, 4)

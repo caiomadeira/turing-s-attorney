@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://j4ain72rjt5y" path="res://game/scripts/game.gd" id="1_game"]
 [ext_resource type="PackedScene" path="res://game/scenes/ui/inventory_panel.tscn" id="2_inventory"]
 [ext_resource type="Script" uid="uid://cipcbw8ibb43v" path="res://game/scripts/item_toast.gd" id="3_toast"]
+[ext_resource type="PackedScene" path="res://game/scenes/ui/note_viewer.tscn" id="4_note"]
 
 [node name="Game" type="Control" unique_id=1023878334]
 layout_mode = 3
@@ -36,6 +37,12 @@ theme_override_font_sizes/font_size = 20
 text = "Inventário"
 
 [node name="InventoryPanel" parent="HUD" unique_id=647860841 instance=ExtResource("2_inventory")]
+unique_name_in_owner = true
+
+[node name="NoteLayer" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="NoteViewer" parent="NoteLayer" instance=ExtResource("4_note")]
 unique_name_in_owner = true
 
 [node name="ToastLayer" type="CanvasLayer" parent="." unique_id=1947554282]
