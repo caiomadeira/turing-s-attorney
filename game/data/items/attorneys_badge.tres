@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dhhggcsim4jvd"]
 
-[ext_resource type="Texture2D" uid="uid://cab3nld15yoon" path="res://icon.svg" id="1_7mju8"]
+[ext_resource type="Texture2D" path="res://game/ui/items/distintivo.svg" id="1_7mju8"]
 [ext_resource type="Script" uid="uid://draj807mgbd6w" path="res://game/resources/item_data.gd" id="1_item"]
 
 [resource]
 script = ExtResource("1_item")
 id = "attorneys_badge"
-display_name = "Distintivo de Advogado"
-description = "Prova de que o portador está habilitado a defender em tribunal."
+display_name = "Distintivo de Promotor"
+description = "Prova de que o portador é promotor do Estado, habilitado a acusar em tribunal."
 icon = ExtResource("1_7mju8")

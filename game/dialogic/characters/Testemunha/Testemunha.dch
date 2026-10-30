@@ -10,16 +10,25 @@
 "style": "",
 "suffix": ""
 },
-&"default_portrait": "12705616",
+&"default_portrait": "normal",
 &"description": "",
 &"display_name": "Testemunha",
 &"mirror": false,
 &"nicknames": [""],
 &"offset": Vector2(0, 0),
 &"portraits": {
-"12705616": {
+"normal": {
 "export_overrides": {
-"image": "\"res://game/dialogic/characters/Testemunha/12705616.jpg\""
+"image": "\"res://game/dialogic/characters/Testemunha/porteiro_normal.png\""
+},
+"mirror": false,
+"offset": Vector2(0, 0),
+"scale": 1,
+"scene": ""
+},
+"nervoso": {
+"export_overrides": {
+"image": "\"res://game/dialogic/characters/Testemunha/porteiro_nervoso.png\""
 },
 "mirror": false,
 "offset": Vector2(0, 0),

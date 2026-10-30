@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://covpu5ke1blyb"]
+
+[ext_resource type="Script" uid="uid://demms3tchpq4x" path="res://game/scripts/location.gd" id="1_location"]
+
+[node name="Veredito" type="Control" unique_id=1221436901]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_location")
+
+[node name="Background" type="ColorRect" parent="." unique_id=2140984872]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.09, 0.07, 0.12, 1)
+
+[node name="Center" type="VBoxContainer" parent="." unique_id=1209464601]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = -180.0
+offset_right = 420.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Title" type="Label" parent="Center" unique_id=1034306640]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 1)
+theme_override_font_sizes/font_size = 72
+text = "CULPADO!"
+horizontal_alignment = 1
+
+[node name="Line1" type="Label" parent="Center" unique_id=932474788]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "O Sr. BERT foi declarado uma inteligência artificial."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Line2" type="Label" parent="Center" unique_id=527682476]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Fim de jogo. Mandou bem."
+horizontal_alignment = 1
+autowrap_mode = 3

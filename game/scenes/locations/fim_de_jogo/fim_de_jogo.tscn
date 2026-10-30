@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://dkk23pikxtysk"]
+
+[ext_resource type="Script" uid="uid://demms3tchpq4x" path="res://game/scripts/location.gd" id="1_location"]
+[ext_resource type="Script" uid="uid://xovcehd60trc" path="res://game/scripts/scene_exit.gd" id="2_exit"]
+
+[node name="FimDeJogo" type="Control" unique_id=937459707]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_location")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1760586417]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.12, 0.04, 0.05, 1)
+
+[node name="Center" type="VBoxContainer" parent="." unique_id=1561927021]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = -180.0
+offset_right = 420.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Title" type="Label" parent="Center" unique_id=1583797203]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 72
+text = "FIM DE JOGO"
+horizontal_alignment = 1
+
+[node name="Line1" type="Label" parent="Center" unique_id=316671531]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "A acusação perdeu toda a credibilidade."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Line2" type="Label" parent="Center" unique_id=691776092]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "O Sr. BERT foi considerado humano e saiu livre."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Retry" type="Button" parent="Center" unique_id=968173012]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+text = "Tentar o julgamento de novo"
+script = ExtResource("2_exit")
+target_scene = "res://game/scenes/locations/tribunal/tribunal.tscn"

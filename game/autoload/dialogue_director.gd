@@ -7,6 +7,8 @@ extends Node
 ##   remove_item:attorneys_badge
 ##   set_flag:met_witness
 ##   change_scene:res://game/scenes/locations/lobby.tscn
+##   lose_credibility:1
+##   set_credibility:5
 ##
 ## change_scene espera a timeline terminar para o local não ser liberado no meio da fala.
 
@@ -103,5 +105,9 @@ func _on_signal_event(argument: Variant) -> void:
 			GameState.set_flag(parts[1])
 		"change_scene":
 			_pending_scene = parts[1]
+		"lose_credibility":
+			GameState.lose_credibility(parts[1].to_int())
+		"set_credibility":
+			GameState.set_credibility(parts[1].to_int())
 		_:
 			push_warning("DialogueDirector: unknown action '%s'" % parts[0])

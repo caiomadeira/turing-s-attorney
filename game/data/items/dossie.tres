@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://game/ui/items/dossie.svg" id="1_icon"]
+[ext_resource type="Script" uid="uid://draj807mgbd6w" path="res://game/resources/item_data.gd" id="2_item"]
+
+[resource]
+script = ExtResource("2_item")
+id = "dossie"
+display_name = "Dossiê do caso"
+description = "Acusado: Sr. BERT. Acusação: ser uma inteligência artificial vivendo como cidadão. Endereço: Edifício Transformer, apartamento 12."
+icon = ExtResource("1_icon")

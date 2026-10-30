@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- Banco dos réus, na frente do retrato. -->
+  <g stroke="#1e1410" stroke-width="6" stroke-linejoin="round">
+    <rect x="300" y="548" width="680" height="26" rx="6" fill="#a8744a"/>
+    <rect x="320" y="572" width="640" height="160" fill="#6b4226"/>
+    <g stroke="#3f2414"><line x1="400" y1="580" x2="400" y2="720"/><line x1="480" y1="580" x2="480" y2="720"/><line x1="560" y1="580" x2="560" y2="720"/><line x1="640" y1="580" x2="640" y2="720"/><line x1="720" y1="580" x2="720" y2="720"/><line x1="800" y1="580" x2="800" y2="720"/><line x1="880" y1="580" x2="880" y2="720"/></g>
+  </g>
+</svg>

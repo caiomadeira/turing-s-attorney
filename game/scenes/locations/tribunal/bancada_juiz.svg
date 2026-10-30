@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- Bancada do juiz, desenhada na frente do retrato. -->
+  <g stroke="#1e1410" stroke-width="6" stroke-linejoin="round">
+    <rect x="-10" y="528" width="1300" height="34" fill="#a8744a"/>
+    <rect x="-10" y="560" width="1300" height="170" fill="#5a341d"/>
+    <rect x="-10" y="560" width="1300" height="14" fill="#c9a24a"/>
+    <rect x="70" y="604" width="300" height="110" rx="8" fill="none" stroke="#3f2414"/>
+    <rect x="490" y="604" width="300" height="110" rx="8" fill="none" stroke="#3f2414"/>
+    <rect x="910" y="604" width="300" height="110" rx="8" fill="none" stroke="#3f2414"/>
+    <ellipse cx="1060" cy="528" rx="70" ry="16" fill="#6b3f22"/>
+  </g>
+</svg>

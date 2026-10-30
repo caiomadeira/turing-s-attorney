@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://game/ui/items/porta_sem_girar.svg" id="1_icon"]
+[ext_resource type="Script" uid="uid://draj807mgbd6w" path="res://game/resources/item_data.gd" id="2_item"]
+
+[resource]
+script = ExtResource("2_item")
+id = "porta_sem_girar"
+display_name = "Porta que abriu sem girar a chave"
+description = "Ao usar a chave, a porta do apartamento 12 simplesmente abriu, sem precisar girar a chave."
+icon = ExtResource("1_icon")

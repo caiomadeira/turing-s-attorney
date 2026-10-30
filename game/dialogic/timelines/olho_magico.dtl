@@ -1,0 +1,8 @@
+Pericles: O olho mágico da porta. Vou dar uma espiada...
+Pericles (objecao): Ué?! Daqui de fora eu consigo ver o apartamento inteiro!
+Pericles (pensando): O olho mágico está instalado ao contrário. No meu treinamento, isso conta como uma anomalia.
+[signal arg="give_item:olho_magico"]
+[signal arg="set_flag:viu_olho_magico"]
+if Inventory.has("dobradicas"):
+	Pericles (normal): Acho que já tenho o suficiente para o julgamento. Hora de ir ao tribunal.
+	[signal arg="set_flag:investigacao_completa"]

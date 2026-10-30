@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- Câmera do juiz: parede atrás da bancada. Arte provisória. -->
+  <defs>
+    <linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b3c22"/><stop offset="1" stop-color="#4a2814"/></linearGradient>
+    <linearGradient id="c" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a1c22"/><stop offset="0.5" stop-color="#a3303a"/><stop offset="1" stop-color="#7a1c22"/></linearGradient>
+    <radialGradient id="l" cx="0.5" cy="0.3" r="0.6"><stop offset="0" stop-color="#ffe7b0" stop-opacity="0.35"/><stop offset="1" stop-color="#ffe7b0" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#w)"/>
+  <g fill="none" stroke="#3a1f0f" stroke-width="6">
+    <rect x="300" y="60" width="200" height="520" rx="6"/><rect x="540" y="60" width="200" height="520" rx="6"/><rect x="780" y="60" width="200" height="520" rx="6"/>
+  </g>
+  <g stroke="#2b170c" stroke-width="5">
+    <path d="M0 0 H260 V720 H0 Z" fill="url(#c)"/><path d="M1020 0 H1280 V720 H1020 Z" fill="url(#c)"/>
+  </g>
+  <g fill="none" stroke="#5e1218" stroke-width="8">
+    <path d="M60 0 Q80 360 60 720 M140 0 Q160 360 140 720 M210 0 Q226 360 210 720"/>
+    <path d="M1070 0 Q1054 360 1070 720 M1140 0 Q1120 360 1140 720 M1220 0 Q1200 360 1220 720"/>
+  </g>
+  <rect y="0" width="1280" height="30" fill="#c9a24a" stroke="#2b170c" stroke-width="5"/>
+  <rect width="1280" height="720" fill="url(#l)"/>
+</svg>

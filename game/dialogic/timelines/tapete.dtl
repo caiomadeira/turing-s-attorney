@@ -1,0 +1,4 @@
+Pericles (pensando): Um tapete de boas-vindas. Será que...
+Pericles (normal): Clássico. A chave estava debaixo do tapete. Óbvio demais.
+[signal arg="give_item:chave_apartamento"]
+[signal arg="set_flag:pegou_chave"]

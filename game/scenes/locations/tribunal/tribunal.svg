@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- Tribunal do Estado. O juiz e o réu entram como retratos do Dialogic por cima. Arte provisória. -->
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#efe3c6"/>
+      <stop offset="1" stop-color="#dccaa0"/>
+    </linearGradient>
+    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7a4a2b"/>
+      <stop offset="1" stop-color="#5a341d"/>
+    </linearGradient>
+    <linearGradient id="window" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bfe3f5"/>
+      <stop offset="1" stop-color="#eaf6fb"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6e2e2a"/>
+      <stop offset="1" stop-color="#4f1f1c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- parede -->
+  <rect width="1280" height="720" fill="url(#wall)"/>
+  <rect width="1280" height="34" fill="#5a341d"/>
+  <rect y="34" width="1280" height="10" fill="#c9a24a"/>
+
+  <!-- janelas altas nas pontas -->
+  <g stroke="#2b2118" stroke-width="4">
+    <path d="M30 330 V130 Q30 80 90 80 Q150 80 150 130 V330 Z" fill="url(#window)"/>
+    <path d="M1130 330 V130 Q1130 80 1190 80 Q1250 80 1250 130 V330 Z" fill="url(#window)"/>
+    <line x1="90" y1="80" x2="90" y2="330"/><line x1="30" y1="200" x2="150" y2="200"/>
+    <line x1="1190" y1="80" x2="1190" y2="330"/><line x1="1130" y1="200" x2="1250" y2="200"/>
+  </g>
+
+  <!-- colunas -->
+  <g fill="#e9dcbc" stroke="#2b2118" stroke-width="4">
+    <rect x="176" y="60" width="44" height="300"/>
+    <rect x="1060" y="60" width="44" height="300"/>
+    <rect x="166" y="52" width="64" height="16"/>
+    <rect x="1050" y="52" width="64" height="16"/>
+  </g>
+  <g stroke="#c8b78f" stroke-width="3">
+    <line x1="190" y1="72" x2="190" y2="356"/><line x1="206" y1="72" x2="206" y2="356"/>
+    <line x1="1074" y1="72" x2="1074" y2="356"/><line x1="1090" y1="72" x2="1090" y2="356"/>
+  </g>
+
+  <!-- brasão com a balança da justiça -->
+  <circle cx="640" cy="150" r="92" fill="#c9a24a" stroke="#2b2118" stroke-width="5"/>
+  <circle cx="640" cy="150" r="74" fill="#f3e7c4" stroke="#2b2118" stroke-width="4"/>
+  <g fill="none" stroke="#2b2118" stroke-width="5" stroke-linecap="round">
+    <line x1="640" y1="98" x2="640" y2="200"/>
+    <line x1="590" y1="118" x2="690" y2="118"/>
+    <line x1="610" y1="200" x2="670" y2="200"/>
+    <path d="M594 120 L576 160 M594 120 L612 160"/>
+    <path d="M686 120 L668 160 M686 120 L704 160"/>
+  </g>
+  <path d="M572 160 Q594 182 616 160 Z" fill="#c9a24a" stroke="#2b2118" stroke-width="4"/>
+  <path d="M664 160 Q686 182 708 160 Z" fill="#c9a24a" stroke="#2b2118" stroke-width="4"/>
+  <circle cx="640" cy="96" r="7" fill="#c9a24a" stroke="#2b2118" stroke-width="3"/>
+
+  <!-- painel de madeira -->
+  <rect y="360" width="1280" height="240" fill="url(#wood)"/>
+  <rect y="352" width="1280" height="14" fill="#3f2414"/>
+  <g fill="none" stroke="#3f2414" stroke-width="5">
+    <rect x="24" y="390" width="180" height="180" rx="6"/>
+    <rect x="232" y="390" width="180" height="180" rx="6"/>
+    <rect x="440" y="390" width="180" height="180" rx="6"/>
+    <rect x="660" y="390" width="180" height="180" rx="6"/>
+    <rect x="868" y="390" width="180" height="180" rx="6"/>
+    <rect x="1076" y="390" width="180" height="180" rx="6"/>
+  </g>
+
+  <!-- piso -->
+  <rect y="600" width="1280" height="120" fill="url(#floor)"/>
+  <rect y="596" width="1280" height="8" fill="#2b170c"/>
+</svg>

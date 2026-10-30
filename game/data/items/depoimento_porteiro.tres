@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://game/ui/items/depoimento.svg" id="1_icon"]
+[ext_resource type="Script" uid="uid://draj807mgbd6w" path="res://game/resources/item_data.gd" id="2_item"]
+
+[resource]
+script = ExtResource("2_item")
+id = "depoimento_porteiro"
+display_name = "Depoimento do porteiro"
+description = "Primeiro o porteiro disse que não sabia de nada. Depois de pressionado, contou que viu o Sr. BERT devorar uma placa de vídeo inteira."
+icon = ExtResource("1_icon")

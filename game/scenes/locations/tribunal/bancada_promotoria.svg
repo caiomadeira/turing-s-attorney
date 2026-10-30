@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- Mesa da promotoria, na frente do retrato. -->
+  <g stroke="#1e1410" stroke-width="6" stroke-linejoin="round">
+    <rect x="200" y="512" width="150" height="26" fill="#f6f1e3" transform="rotate(-4 275 525)"/>
+    <rect x="210" y="494" width="140" height="22" fill="#fffaf0" transform="rotate(3 280 505)"/>
+    <rect x="900" y="506" width="170" height="34" rx="4" fill="#d9b46a"/>
+    <rect x="-10" y="540" width="1300" height="30" fill="#9a6a43"/>
+    <rect x="-10" y="568" width="1300" height="160" fill="#6b4226"/>
+    <g stroke="#4a2814"><line x1="160" y1="580" x2="160" y2="720"/><line x1="480" y1="580" x2="480" y2="720"/><line x1="800" y1="580" x2="800" y2="720"/><line x1="1120" y1="580" x2="1120" y2="720"/></g>
+  </g>
+</svg>
