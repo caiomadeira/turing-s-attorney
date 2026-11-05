@@ -10,16 +10,43 @@
 "style": "",
 "suffix": ""
 },
-&"default_portrait": "Group/Images",
+&"default_portrait": "normal",
 &"description": "",
 &"display_name": "Pericles",
 &"mirror": false,
 &"nicknames": [""],
 &"offset": Vector2(0, 0),
 &"portraits": {
-"Group/Images": {
+"normal": {
 "export_overrides": {
-"image": "\"res://game/dialogic/characters/Pericles/images.png\""
+"image": "\"res://game/dialogic/characters/Pericles/pericles_normal.png\""
+},
+"mirror": false,
+"offset": Vector2(0, 0),
+"scale": 1,
+"scene": ""
+},
+"objecao": {
+"export_overrides": {
+"image": "\"res://game/dialogic/characters/Pericles/pericles_objecao.png\""
+},
+"mirror": false,
+"offset": Vector2(0, 0),
+"scale": 1,
+"scene": ""
+},
+"sem_graca": {
+"export_overrides": {
+"image": "\"res://game/dialogic/characters/Pericles/pericles_sem_graca.png\""
+},
+"mirror": false,
+"offset": Vector2(0, 0),
+"scale": 1,
+"scene": ""
+},
+"pensando": {
+"export_overrides": {
+"image": "\"res://game/dialogic/characters/Pericles/pericles_pensando.png\""
 },
 "mirror": false,
 "offset": Vector2(0, 0),

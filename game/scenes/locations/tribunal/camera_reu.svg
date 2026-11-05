@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- Câmera do réu: parede atrás do banco dos réus. Arte provisória. -->
+  <defs>
+    <linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c8c2b4"/><stop offset="1" stop-color="#a69e8c"/></linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#w)"/>
+  <g stroke="#2b2118" stroke-width="5">
+    <rect x="0" y="380" width="1280" height="340" fill="#5c3a24"/>
+    <rect x="0" y="372" width="1280" height="16" fill="#3f2414"/>
+  </g>
+  <g fill="none" stroke="#3f2414" stroke-width="5">
+    <rect x="40" y="410" width="260" height="280" rx="6"/><rect x="980" y="410" width="260" height="280" rx="6"/>
+  </g>
+  <g stroke="#2b2118" stroke-width="5">
+    <circle cx="1080" cy="170" r="70" fill="#f5efe0"/>
+    <circle cx="1080" cy="170" r="8" fill="#2b2118"/>
+    <line x1="1080" y1="170" x2="1080" y2="118" stroke-width="6"/>
+    <line x1="1080" y1="170" x2="1118" y2="186" stroke-width="6"/>
+  </g>
+  <g fill="#2b2118"><rect x="1077" y="106" width="6" height="12"/><rect x="1077" y="222" width="6" height="12"/><rect x="1020" y="167" width="12" height="6"/><rect x="1128" y="167" width="12" height="6"/></g>
+  <g stroke="#2b2118" stroke-width="5" fill="#8a8476">
+    <rect x="110" y="90" width="150" height="200" rx="4"/>
+  </g>
+  <rect x="124" y="104" width="122" height="172" fill="#bcd3e0" stroke="#2b2118" stroke-width="3"/>
+</svg>

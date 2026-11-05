@@ -12,9 +12,13 @@ A ordem no `project.godot` é a ordem de inicialização. Um autoload enxerga os
 
 `DialogueDirector` é o único script que chama `Dialogic.start()`.
 
-A raiz de `game.tscn` chama `SceneRouter.register_host()` com `%LocationHost`, abre `res://game/scenes/locations/office.tscn` e liga o botão Inventário a `InventoryPanel.toggle()`. Em `dialogue_started`, esconde o painel e desativa o botão. Em `dialogue_finished`, ativa o botão de novo.
+A raiz de `game.tscn` chama `SceneRouter.register_host()` com `%LocationHost`, abre `res://game/scenes/locations/office/office.tscn` e liga o botão Inventário a `InventoryPanel.toggle()`. Em `dialogue_started`, esconde o painel e desativa o botão. Em `dialogue_finished`, ativa o botão de novo.
 
 O ponteiro do mouse é a imagem em `display/mouse_cursor/custom_image` do `project.godot`.
+
+`game.tscn` também tem a `CredibilityLayer` (camada 50) com a `CredibilityBar`, os losangos do julgamento.
+
+O caminho do jogo, fase por fase, está em [Fluxo do jogo](#fluxo-do-jogo), no fim deste arquivo.
 
 ## Classes
 
@@ -34,6 +38,8 @@ O ponteiro do mouse é a imagem em `display/mouse_cursor/custom_image` do `proje
 | [ExitArrow](#exitarrow) | `SceneExit` | Seta para outro local |
 | [InventoryPanel](#inventorypanel) | `Control` | Painel do inventário |
 | [ItemToast](#itemtoast) | `PanelContainer` | Aviso de item adquirido |
+| [CredibilityBar](#credibilitybar) | `Control` | Losangos de credibilidade no julgamento |
+| [SpeakerLayer](#speakerlayer) | `DialogicLayoutLayer` | Só o retrato de quem fala, e a câmera do tribunal |
 
 ---
 
@@ -45,7 +51,7 @@ O ponteiro do mouse é a imagem em `display/mouse_cursor/custom_image` do `proje
 
 **Script:** `res://game/autoload/game_state.gd`
 
-Flags da história que não são itens do inventário.
+Flags da história que não são itens do inventário, e a credibilidade do promotor no julgamento.
 
 ## Descrição
 
@@ -64,6 +70,26 @@ A linha de dentro da condição leva tab.
 
 `has_flag()` devolve `true` quando o valor guardado é `true`. Uma flag ausente e uma flag gravada como `false` devolvem `false`.
 
+`credibility` conta os losangos do promotor. O julgamento começa com `MAX_CREDIBILITY` e cada argumento errado tira um. A timeline confere quando acabou:
+
+```gdscript
+[signal arg="lose_credibility:1"]
+if GameState.credibility <= 0:
+	jump sem_credibilidade
+```
+
+## Constantes
+
+### int MAX_CREDIBILITY = 5
+
+Losangos com que o julgamento começa.
+
+## Propriedades
+
+| Tipo | Propriedade | Valor padrão |
+| --- | --- | --- |
+| int | credibility | `5` |
+
 ## Métodos
 
 | Tipo de retorno | Método |
@@ -71,12 +97,18 @@ A linha de dentro da condição leva tab.
 | void | set_flag(flag: String, value: bool = true) |
 | bool | has_flag(flag: String) |
 | void | clear_flag(flag: String) |
+| void | set_credibility(value: int) |
+| void | lose_credibility(amount: int = 1) |
 
 ## Sinais
 
 ### flag_changed(flag: String, value: bool)
 
 Emitido depois que `set_flag()` grava a flag. `value` é o valor novo. `clear_flag()` também emite este sinal, com `false`.
+
+### credibility_changed(value: int)
+
+Emitido depois que `set_credibility()` ou `lose_credibility()` mudam `credibility`. `CredibilityBar` escuta este sinal.
 
 ---
 
@@ -95,6 +127,14 @@ Devolve `true` quando `flag` está guardada como `true`.
 ### void clear_flag(flag: String)
 
 Equivale a `set_flag(flag, false)`.
+
+### void set_credibility(value: int)
+
+Grava `credibility` com `value`, preso entre `0` e `MAX_CREDIBILITY`, e emite `credibility_changed`. A timeline do julgamento chama com `[signal arg="set_credibility:5"]` ao começar, então tentar de novo volta aos 5 losangos.
+
+### void lose_credibility(amount: int = 1)
+
+Equivale a `set_credibility(credibility - amount)`. A timeline chama com `[signal arg="lose_credibility:1"]`.
 
 ---
 
@@ -249,14 +289,21 @@ Inicia timelines do Dialogic e aplica os sinais delas ao jogo.
 
 ## Descrição
 
-`start()` aceita um caminho `res://` terminado em `.dtl`, ou o nome registrado pelo Dialogic, como `pegar_distintivo`. No `_ready`, chama `DialogicResourceUtil.update()` para o Dialogic encontrar os `.dch` e `.dtl` do projeto.
+`start()` aceita um caminho `res://` terminado em `.dtl`, ou o nome registrado pelo Dialogic, como `intro`. No `_ready`, chama `DialogicResourceUtil.update()` para o Dialogic encontrar os `.dch` e `.dtl` do projeto.
 
 Enquanto `is_running` é `true`, `Location` desliga os botões do local, e a cena principal fecha o inventário.
 
-O identificador de uma fala é o nome do arquivo `.dch`, sem a extensão:
+O identificador de uma fala é o nome do arquivo `.dch`, sem a extensão, com as mesmas maiúsculas: `Pericles`, `Testemunha`, `Juiz` e `Bert`. O Dialogic grava esses nomes em `dialogic/directories/dch_directory` do `project.godot` quando o editor abre. Um caminho como `Pericles/Pericles` não é encontrado, e a fala sai sem retrato.
 
 ```text
-pericles: Este é o escritório. Quieto, por enquanto.
+Pericles: Este é o escritório. Quieto, por enquanto.
+```
+
+A pose fica entre parênteses, antes dos dois-pontos. Sem pose, uma conversa nova começa na pose padrão do personagem, e a mesma pessoa falando de novo mantém a pose anterior. Não use `join`, `leave` nem `update`: quem aparece na tela é sempre quem fala. Veja [SpeakerLayer](#speakerlayer).
+
+```text
+Pericles (objecao): PROTESTO!
+Juiz (bravo): Ordem no tribunal!
 ```
 
 Um evento Signal do Dialogic manda o texto `ação:valor`. O diretor separa no primeiro `:`.
@@ -267,15 +314,17 @@ Um evento Signal do Dialogic manda o texto `ação:valor`. O diretor separa no p
 | `remove_item:attorneys_badge` | `Inventory.remove()` |
 | `set_flag:met_witness` | `GameState.set_flag()` com `true` |
 | `change_scene:res://game/scenes/locations/lobby.tscn` | `SceneRouter.go_to()` quando a timeline acabar |
+| `lose_credibility:1` | `GameState.lose_credibility()` |
+| `set_credibility:5` | `GameState.set_credibility()` |
 
 `change_scene` espera `timeline_ended`. A fala segue até o fim, e o local só troca depois. Vários `change_scene` na mesma timeline deixam o último caminho.
 
 Um argumento que não é `String`, sem os dois lados do `:`, ou com uma ação desconhecida, gera um aviso e é ignorado.
 
 ```text
-pericles: Meu distintivo de advogado estava na mesa. Vou levá-lo.
+Pericles: Meu distintivo de promotor. Vou levá-lo comigo.
 [signal arg="give_item:attorneys_badge"]
-[signal arg="set_flag:got_badge"]
+[signal arg="set_flag:pegou_dossie"]
 ```
 
 ## Propriedades
@@ -457,11 +506,32 @@ A cada um desses sinais, percorre os `BaseButton` descendentes. Quem tem `refres
 
 Um local novo reutiliza este script na raiz. A saída para outra cena é um `SceneExit` filho, com `target_scene` apontando para o `.tscn` do outro local. `ExitArrow` é essa saída com uma seta.
 
+Com `enter_timeline` preenchido, o local abre essa timeline assim que entra na tela. O escritório, a portaria, o corredor e o apartamento usam isso para a fala de chegada, com `enter_timeline_once`. O tribunal usa para o julgamento inteiro, sem `enter_timeline_once`, para tocar de novo depois do fim de jogo.
+
+## Propriedades
+
+| Tipo | Propriedade | Valor padrão |
+| --- | --- | --- |
+| String | enter_timeline | `""` |
+| bool | enter_timeline_once | `false` |
+
 ## Métodos
 
 | Tipo de retorno | Método |
 | --- | --- |
 | bool | is_input_locked(tree: SceneTree) |
+
+---
+
+## Descrições das propriedades
+
+### String enter_timeline = ""
+
+Timeline aberta quando o local entra na tela, com `DialogueDirector.start()`, um frame depois do `_ready`. O export aceita arquivos `*.dtl`. Vazia, nada abre.
+
+### bool enter_timeline_once = false
+
+Com `true`, a timeline de entrada toca só na primeira visita. A visita fica guardada na flag `entrou:<caminho da timeline>` do `GameState`.
 
 ---
 
@@ -486,6 +556,8 @@ Botão que troca o cursor do mouse enquanto o ponteiro está em cima.
 ## Descrição
 
 `Hotspot` e `SceneExit` herdam esta classe. `ExitArrow` herda `SceneExit`. `Hotspot` usa a troca de cursor; `ExitArrow` sobrescreve esse comportamento para manter o cursor padrão e desenhar sua seta no próprio botão.
+
+No `_ready`, o botão fica com `focus_mode` em `FOCUS_NONE`. Enter e Espaço avançam as falas do Dialogic; com foco, o último ponto clicado seria apertado de novo quando a fala acaba.
 
 Com o ponteiro em cima, e o botão ativo, o cursor passa a ser `icon_texture`, redimensionado para `proportions` com filtro nearest. O ponto de clique é `hotspot`, em pixels da textura original, escalado na mesma proporção. Nada é desenhado sobre o botão. Com o botão desativado, ou sem textura, o cursor volta à seta do projeto.
 
@@ -763,3 +835,115 @@ Aviso temporário de item adquirido.
 Começa oculto e ignora o mouse (`MOUSE_FILTER_IGNORE`). Escuta `Inventory.item_added`.
 
 Quando um item entra no inventário, mostra o `icon` e o texto "Item {display_name} adquirido". O aviso permanece 2,6 segundos e some em 0,35 segundos. Um item novo nesse intervalo reinicia a contagem e mantém o aviso visível.
+
+---
+
+# CredibilityBar
+
+**Herda:** [Control](https://docs.godotengine.org/en/stable/classes/class_control.html) **<** [CanvasItem](https://docs.godotengine.org/en/stable/classes/class_canvasitem.html) **<** [Node](https://docs.godotengine.org/en/stable/classes/class_node.html) **<** [Object](https://docs.godotengine.org/en/stable/classes/class_object.html)
+
+**Script:** `res://game/scripts/credibility_bar.gd`
+
+Losangos de credibilidade do promotor, no canto superior esquerdo durante o julgamento, abaixo do botão Inventário.
+
+## Descrição
+
+Desenha `GameState.MAX_CREDIBILITY` losangos com `_draw()`, sem imagem. Os primeiros `GameState.credibility` ficam cheios e o resto fica escuro. Quando perde um losango, a barra pisca em vermelho.
+
+Fica invisível até o `GameState` ter a flag `show_flag`. A timeline do julgamento grava `em_julgamento` no começo. Ignora o mouse (`MOUSE_FILTER_IGNORE`).
+
+## Propriedades
+
+| Tipo | Propriedade | Valor padrão |
+| --- | --- | --- |
+| String | show_flag | `"em_julgamento"` |
+| float | diamond_size | `36.0` |
+| float | spacing | `12.0` |
+
+---
+
+# SpeakerLayer
+
+**Herda:** `DialogicLayoutLayer` (Dialogic) **<** [Node](https://docs.godotengine.org/en/stable/classes/class_node.html) **<** [Object](https://docs.godotengine.org/en/stable/classes/class_object.html)
+
+**Script:** `res://game/dialogic/styles/speaker_layer.gd`
+
+**Cena:** `res://game/dialogic/styles/speaker_layer.tscn`
+
+Camada do estilo `textbox.tres` que mostra só o retrato de quem está falando, como no Ace Attorney.
+
+## Descrição
+
+A cena tem três nós, de baixo para cima: `CourtBackground` (fundo do tribunal), `SpeakerPortrait` (container do Dialogic no modo `SPEAKER`) e `CourtDesk` (bancada na frente do retrato). O Dialogic troca o retrato do `SpeakerPortrait` sozinho a cada fala. Fica entre a camada de retratos do Dialogic e a caixa de texto.
+
+Com a flag `em_julgamento` no `GameState`, a camada escuta `Dialogic.Text.speaker_updated` e troca fundo e bancada pelo personagem que fala, conforme `COURT_CAMERAS`. Fora do julgamento, fundo e bancada ficam escondidos e o retrato aparece por cima do local.
+
+As trocas são cortes secos: `dialogic/animations/join_default_length`, `leave_default_length` e `cross_fade_default_length` estão em `0.0` no `project.godot`.
+
+## Constantes
+
+### Dictionary COURT_CAMERAS
+
+Câmera de cada personagem no julgamento. A chave é o nome do `.dch`; o valor é `[fundo, bancada]`.
+
+| Personagem | Fundo | Bancada |
+| --- | --- | --- |
+| Juiz | `tribunal/camera_juiz.svg` | `tribunal/bancada_juiz.svg` |
+| Pericles | `tribunal/camera_promotoria.svg` | `tribunal/bancada_promotoria.svg` |
+| Bert | `tribunal/camera_reu.svg` | `tribunal/bancada_reu.svg` |
+
+Os caminhos ficam em `res://game/scenes/locations/`.
+
+### String COURT_FLAG = "em_julgamento"
+
+Flag que liga as câmeras.
+
+## Poses
+
+Cada pose é um PNG com fundo transparente na pasta do personagem, registrado no `.dch`:
+
+| Personagem | Poses (a primeira é a padrão) |
+| --- | --- |
+| Pericles | `normal`, `objecao`, `sem_graca`, `pensando` |
+| Juiz | `normal`, `bravo`, `satisfeito` |
+| Bert | `normal`, `abalado` |
+| Testemunha | `normal`, `nervoso` |
+
+O retrato é escalado para a altura da tela (720) e alinhado embaixo, no centro. Os PNGs atuais têm 1280×720, com o personagem já enquadrado. Para trocar uma arte, basta substituir o PNG com o mesmo nome. Para criar uma pose nova: coloque o PNG na pasta, adicione o retrato no editor de personagens do Dialogic e use `Nome (pose): fala` na timeline.
+
+---
+
+# Fluxo do jogo
+
+Três fases: o caso chega, a investigação e o julgamento. O roteiro do julgamento vem do `jure.html` (Twine).
+
+## Fase 1: o caso chega
+
+| Local | Cena | O que acontece |
+| --- | --- | --- |
+| Escritório | `locations/office/office.tscn` | `intro.dtl` toca na chegada. A mesa (`timeline_1.dtl`) entrega `attorneys_badge` e `dossie` e grava `pegou_dossie`. O dossiê aparece ao lado da mesa e abre no leitor de notas. A saída para a portaria tem `ItemLock` com `dossie`. |
+
+## Fase 2: investigação
+
+| Local | Cena | O que acontece |
+| --- | --- | --- |
+| Portaria | `locations/lobby/lobby.tscn` | `portaria_entrada.dtl` na chegada. A testemunha (`timeline_2.dtl`) pode ser pressionada: rende `depoimento_porteiro` e grava `pressionou_porteiro`. |
+| Corredor | `locations/corredor/corredor.tscn` | Olho mágico (`olho_magico.dtl`) rende `olho_magico`. Tapete (`tapete.dtl`) rende `chave_apartamento`. Porta (`porta.dtl`): sem a chave, só comenta; com a chave, rende `porta_sem_girar`, grava `abriu_porta` e entra no apartamento. |
+| Apartamento | `locations/apartamento/apartamento.tscn` | Porta por dentro (`dobradicas.dtl`) rende `dobradicas`. Computador e filtro são pistas falsas, só fala. |
+
+Quando o jogador tem `olho_magico` e `dobradicas`, a timeline que deu o segundo item grava `investigacao_completa`. Essa flag mostra o botão "Ir ao tribunal" no corredor e no apartamento.
+
+## Fase 3: julgamento
+
+`locations/tribunal/tribunal.tscn` abre `julgamento.dtl`. A timeline grava `em_julgamento` e `set_credibility:5`. A partir daí, cada fala troca a câmera para quem fala (veja [SpeakerLayer](#speakerlayer)).
+
+| Escolha | Resultado |
+| --- | --- |
+| Aparência do suspeito | Perde 1 losango e volta aos argumentos |
+| Testemunha | Perde 1 losango e volta aos argumentos (texto provisório: o `jure.html` não tem esta parte) |
+| Investigação, porta trancada | Perde 1 losango e volta às provas do apartamento |
+| Investigação, olho mágico | O réu se defende e o jogador apresenta uma prova |
+| Prova: dobradiças da porta | Vence: veredito em `locations/veredito/veredito.tscn` |
+| Qualquer outra prova | Perde 1 losango e pergunta de novo |
+
+Sem losangos, a timeline pula para `sem_credibilidade` e vai para `locations/fim_de_jogo/fim_de_jogo.tscn`. O botão "Tentar o julgamento de novo" volta ao tribunal com 5 losangos; os itens continuam no inventário.

@@ -1,7 +1,12 @@
-join Pericles/Pericles leftmost
-Pericles/Pericles: Voce viu alguem correndo por aqui?
-join characters/Testemunha rightmost
-characters/Testemunha: Eu vi um cara careca correndo pela porta de entrada.
-update Pericles/Pericles [animation="Shake Y" length="0.2"]
-Pericles/Pericles: Obrigado.
-leave --All-- [animation="Fade Out" length="0.2"]
+# Porteiro (testemunha). Pressionar funciona e rende o depoimento.
+Pericles: Bom dia. O senhor conhece o morador do apartamento 12, o Sr. BERT?
+Testemunha: Eu já disse. Não sei de nada.
+- Pressionar
+	Pericles (objecao): O senhor é o porteiro! Vê todo mundo que entra e sai deste prédio. Não sabe de nada mesmo?
+	Testemunha (nervoso): <Empty Text Event>
+	Testemunha (nervoso): Ele abriu e era uma ´Ele devorou uma placa de vídeo inteira!
+	[signal arg="give_item:depoimento_porteiro"]
+	[signal arg="set_flag:pressionou_porteiro"]
+	Pericles (pensando): Uma placa de vídeo inteira... Vou anotar isso.
+- Ir embora
+	Pericles (sem_graca): Tudo bem. Desculpe o incômodo.

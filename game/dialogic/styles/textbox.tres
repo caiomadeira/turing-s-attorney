@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://cvgf4c6gg0tsy" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_TextInput/text_input_layer.tscn" id="9_ufmul"]
 [ext_resource type="PackedScene" uid="uid://lx24i8fl6uo" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_History/history_layer.tscn" id="10_51hgr"]
 [ext_resource type="Script" uid="uid://dv08k6ljua6fm" path="res://addons/dialogic/Resources/dialogic_style.gd" id="11_gup4f"]
+[ext_resource type="PackedScene" path="res://game/dialogic/styles/speaker_layer.tscn" id="12_speaker"]
 
 [sub_resource type="Resource" id="Resource_moyl8"]
 script = ExtResource("2_cl3qi")
@@ -54,10 +55,14 @@ scene = ExtResource("9_ufmul")
 script = ExtResource("2_cl3qi")
 scene = ExtResource("10_51hgr")
 
+[sub_resource type="Resource" id="Resource_speaker"]
+script = ExtResource("2_cl3qi")
+scene = ExtResource("12_speaker")
+
 [resource]
 script = ExtResource("11_gup4f")
 name = "textbox"
-layer_list = Array[String](["10", "11", "12", "13", "14", "15", "16", "17"])
+layer_list = Array[String](["10", "11", "18", "12", "13", "14", "15", "16", "17"])
 layer_info = {
 "": SubResource("Resource_moyl8"),
 "10": SubResource("Resource_velj2"),
@@ -67,6 +72,7 @@ layer_info = {
 "14": SubResource("Resource_l25a6"),
 "15": SubResource("Resource_6nsqt"),
 "16": SubResource("Resource_n3437"),
-"17": SubResource("Resource_jw35c")
+"17": SubResource("Resource_jw35c"),
+"18": SubResource("Resource_speaker")
 }
 metadata/_latest_layer = "13"

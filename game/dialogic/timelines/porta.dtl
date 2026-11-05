@@ -1,0 +1,12 @@
+# Porta do apartamento 12. O promotor nunca testa a maçaneta: no julgamento isso volta contra ele.
+if not Inventory.has("chave_apartamento"):
+	Pericles: A porta do apartamento 12.
+	Pericles (pensando): Não vou sair forçando a maçaneta... Deve ter uma chave escondida por aqui.
+elif not GameState.has_flag("abriu_porta"):
+	Pericles (normal): Vou usar a chave que estava debaixo do tapete.
+	Pericles (pensando): Ué... A porta simplesmente abriu, sem eu precisar girar a chave. Estranho.
+	[signal arg="give_item:porta_sem_girar"]
+	[signal arg="set_flag:abriu_porta"]
+	[signal arg="change_scene:res://game/scenes/locations/apartamento/apartamento.tscn"]
+else:
+	[signal arg="change_scene:res://game/scenes/locations/apartamento/apartamento.tscn"]

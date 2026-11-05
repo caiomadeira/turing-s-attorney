@@ -1,0 +1,103 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://demms3tchpq4x" path="res://game/scripts/location.gd" id="1_location"]
+[ext_resource type="Texture2D" path="res://game/scenes/locations/corredor/corredor.svg" id="2_bg"]
+[ext_resource type="Script" uid="uid://sqisom7qbg0p" path="res://game/scripts/hotspot.gd" id="3_hotspot"]
+[ext_resource type="Texture2D" uid="uid://ldftq0bewmhk" path="res://assets/kenney_cursor-pack/PNG/Outline/Default/gauntlet_open.png" id="4_hand"]
+[ext_resource type="Script" uid="uid://nvjkgra5sq1n" path="res://game/scripts/exit_arrow.gd" id="5_arrow"]
+[ext_resource type="Script" uid="uid://xovcehd60trc" path="res://game/scripts/scene_exit.gd" id="6_exit"]
+
+[node name="Corredor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_location")
+enter_timeline = "res://game/dialogic/timelines/corredor_entrada.dtl"
+enter_timeline_once = true
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+
+[node name="ToPortaria" type="Button" parent="."]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 170.0
+offset_right = 270.0
+offset_bottom = 532.0
+script = ExtResource("5_arrow")
+target_scene = "res://game/scenes/locations/lobby/lobby.tscn"
+direction = 0
+
+[node name="Porta" type="Button" parent="."]
+layout_mode = 0
+offset_left = 520.0
+offset_top = 150.0
+offset_right = 760.0
+offset_bottom = 532.0
+focus_mode = 0
+flat = true
+script = ExtResource("3_hotspot")
+timeline = "res://game/dialogic/timelines/porta.dtl"
+icon_texture = ExtResource("4_hand")
+proportions = Vector2(32, 32)
+hotspot = Vector2(9, 4)
+
+[node name="OlhoMagico" type="Button" parent="."]
+layout_mode = 0
+offset_left = 610.0
+offset_top = 246.0
+offset_right = 670.0
+offset_bottom = 306.0
+focus_mode = 0
+flat = true
+script = ExtResource("3_hotspot")
+timeline = "res://game/dialogic/timelines/olho_magico.dtl"
+timeline_if_flag = "res://game/dialogic/timelines/olho_magico_visto.dtl"
+flag = "viu_olho_magico"
+icon_texture = ExtResource("4_hand")
+proportions = Vector2(32, 32)
+hotspot = Vector2(9, 4)
+
+[node name="Tapete" type="Button" parent="."]
+layout_mode = 0
+offset_left = 468.0
+offset_top = 590.0
+offset_right = 830.0
+offset_bottom = 672.0
+focus_mode = 0
+flat = true
+script = ExtResource("3_hotspot")
+timeline = "res://game/dialogic/timelines/tapete.dtl"
+timeline_if_flag = "res://game/dialogic/timelines/tapete_vazio.dtl"
+flag = "pegou_chave"
+icon_texture = ExtResource("4_hand")
+proportions = Vector2(32, 32)
+hotspot = Vector2(9, 4)
+
+[node name="ToTribunal" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -264.0
+offset_top = -84.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+focus_mode = 0
+theme_override_font_sizes/font_size = 24
+text = "Ir ao tribunal"
+script = ExtResource("6_exit")
+target_scene = "res://game/scenes/locations/tribunal/tribunal.tscn"
+required_flag = "investigacao_completa"

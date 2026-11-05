@@ -1,0 +1,8 @@
+Pericles: A porta de entrada, vista por dentro.
+Pericles: As dobradiças ficam aqui dentro, como em todas as portas do prédio. A porta foi instalada do jeito certo.
+[signal arg="give_item:dobradicas"]
+[signal arg="set_flag:viu_dobradicas"]
+if Inventory.has("olho_magico"):
+	Pericles (pensando): Então por que o olho mágico está ao contrário?
+	Pericles (normal): Acho que já tenho o suficiente para o julgamento. Hora de ir ao tribunal.
+	[signal arg="set_flag:investigacao_completa"]

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- Câmera da promotoria: atrás do promotor. Arte provisória. -->
+  <defs>
+    <linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9dcbc"/><stop offset="1" stop-color="#d1bd92"/></linearGradient>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe3f5"/><stop offset="1" stop-color="#eaf6fb"/></linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#w)"/>
+  <g stroke="#2b2118" stroke-width="5">
+    <path d="M90 420 V140 Q90 70 180 70 Q270 70 270 140 V420 Z" fill="url(#g)"/>
+    <path d="M1010 420 V140 Q1010 70 1100 70 Q1190 70 1190 140 V420 Z" fill="url(#g)"/>
+    <line x1="180" y1="70" x2="180" y2="420"/><line x1="90" y1="240" x2="270" y2="240"/>
+    <line x1="1100" y1="70" x2="1100" y2="420"/><line x1="1010" y1="240" x2="1190" y2="240"/>
+  </g>
+  <g fill="#e9dcbc" stroke="#2b2118" stroke-width="5">
+    <rect x="330" y="40" width="50" height="400"/><rect x="900" y="40" width="50" height="400"/>
+  </g>
+  <rect y="430" width="1280" height="290" fill="#7a4a2b" stroke="#2b2118" stroke-width="5"/>
+  <g fill="none" stroke="#4a2814" stroke-width="5">
+    <rect x="30" y="460" width="230" height="230" rx="6"/><rect x="290" y="460" width="230" height="230" rx="6"/>
+    <rect x="760" y="460" width="230" height="230" rx="6"/><rect x="1020" y="460" width="230" height="230" rx="6"/>
+  </g>
+  <rect y="0" width="1280" height="26" fill="#5a341d"/>
+</svg>

@@ -1,5 +1,8 @@
-join Pericles/Pericles left
-Pericles/Pericles: Meu distintivo, vou leva-lo comigo.
+# Mesa do escritório: entrega o distintivo e o dossiê do caso.
+Pericles: Meu distintivo de promotor. Vou levá-lo comigo.
 [signal arg="give_item:attorneys_badge"]
-Pericles/Pericles: A chave do escritório estava na mesa. Vou levá-la.
-[signal arg="give_item:office_key"]
+Pericles: E aqui está o caso novo. Um dossiê do Estado...
+Pericles (pensando): Um cidadão acusado de ser uma inteligência artificial. Todo dia isso...
+[signal arg="give_item:dossie"]
+[signal arg="set_flag:pegou_dossie"]
+Pericles (normal): Vou ler o dossiê com calma antes de sair. Deixei aberto aqui do lado da mesa.

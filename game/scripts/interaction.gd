@@ -12,6 +12,9 @@ var _hovered := false
 
 
 func _ready() -> void:
+	# Sem foco de teclado: Enter e Espaço avançam as falas do Dialogic e,
+	# com foco, apertariam de novo o último ponto clicado quando a fala acaba.
+	focus_mode = Control.FOCUS_NONE
 	mouse_default_cursor_shape = Control.CURSOR_ARROW
 	mouse_entered.connect(_set_hovered.bind(true))
 	mouse_exited.connect(_set_hovered.bind(false))

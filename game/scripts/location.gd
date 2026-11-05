@@ -1,6 +1,12 @@
 class_name Location
 extends Control
 
+## Timeline aberta quando o local entra na tela. Vazia, nada abre.
+@export_file("*.dtl") var enter_timeline: String = ""
+## Com true, a timeline de entrada toca só na primeira visita ao local.
+@export var enter_timeline_once: bool = false
+
+
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	DialogueDirector.dialogue_started.connect(_refresh_input)
@@ -10,6 +16,17 @@ func _ready() -> void:
 		viewer.opened.connect(_refresh_input)
 		viewer.closed.connect(_refresh_input)
 	_refresh_input()
+	if not enter_timeline.is_empty():
+		_play_enter_timeline.call_deferred()
+
+
+func _play_enter_timeline() -> void:
+	# A flag "entrou:<caminho da timeline>" marca que a timeline de entrada já tocou.
+	var seen_flag := "entrou:" + enter_timeline
+	if enter_timeline_once and GameState.has_flag(seen_flag):
+		return
+	if DialogueDirector.start(enter_timeline):
+		GameState.set_flag(seen_flag)
 
 
 func _refresh_input() -> void:

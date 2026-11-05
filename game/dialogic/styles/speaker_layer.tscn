@@ -1,0 +1,68 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/dialogic/styles/speaker_layer.gd" id="1_layer"]
+[ext_resource type="Script" uid="uid://d0ptqnbudhkyj" path="res://addons/dialogic/Modules/Character/node_portrait_container.gd" id="2_container"]
+[ext_resource type="Script" uid="uid://diexbgvrksk2k" path="res://addons/dialogic/Resources/flex_vector.gd" id="3_flex"]
+
+[sub_resource type="Resource" id="Resource_size"]
+script = ExtResource("3_flex")
+x_value = 1.0
+y_value = 1.0
+
+[sub_resource type="Resource" id="Resource_position"]
+script = ExtResource("3_flex")
+x_value = 0.5
+y_value = 1.0
+
+[sub_resource type="Resource" id="Resource_origin"]
+script = ExtResource("3_flex")
+x_value = 0.5
+y_value = 1.0
+
+[node name="SpeakerLayer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_layer")
+
+[node name="CourtBackground" type="TextureRect" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="SpeakerPortrait" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+script = ExtResource("2_container")
+mode = 1
+container_size = SubResource("Resource_size")
+container_position = SubResource("Resource_position")
+container_origin = SubResource("Resource_origin")
+
+[node name="CourtDesk" type="TextureRect" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6

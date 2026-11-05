@@ -26,11 +26,29 @@ DialogueDirector="*res://game/autoload/dialogue_director.gd"
 [dialogic]
 
 directories/dch_directory={
-"Pericles/Pericles": "res://game/dialogic/characters/Pericles/Pericles.dch",
-"characters/Testemunha": "res://game/dialogic/characters/Testemunha/Testemunha.dch"
+"Bert": "res://game/dialogic/characters/Bert/Bert.dch",
+"Juiz": "res://game/dialogic/characters/Juiz/Juiz.dch",
+"Pericles": "res://game/dialogic/characters/Pericles/Pericles.dch",
+"Testemunha": "res://game/dialogic/characters/Testemunha/Testemunha.dch"
 }
 directories/dtl_directory={
+"apartamento_entrada": "res://game/dialogic/timelines/apartamento_entrada.dtl",
+"computador": "res://game/dialogic/timelines/computador.dtl",
+"corredor_entrada": "res://game/dialogic/timelines/corredor_entrada.dtl",
+"dobradicas": "res://game/dialogic/timelines/dobradicas.dtl",
+"dobradicas_vistas": "res://game/dialogic/timelines/dobradicas_vistas.dtl",
+"filtro": "res://game/dialogic/timelines/filtro.dtl",
+"intro": "res://game/dialogic/timelines/intro.dtl",
+"julgamento": "res://game/dialogic/timelines/julgamento.dtl",
+"mesa_vazia": "res://game/dialogic/timelines/mesa_vazia.dtl",
 "office_door_locked": "res://game/dialogic/timelines/office_door_locked.dtl",
+"olho_magico": "res://game/dialogic/timelines/olho_magico.dtl",
+"olho_magico_visto": "res://game/dialogic/timelines/olho_magico_visto.dtl",
+"porta": "res://game/dialogic/timelines/porta.dtl",
+"portaria_entrada": "res://game/dialogic/timelines/portaria_entrada.dtl",
+"porteiro_depois": "res://game/dialogic/timelines/porteiro_depois.dtl",
+"tapete": "res://game/dialogic/timelines/tapete.dtl",
+"tapete_vazio": "res://game/dialogic/timelines/tapete_vazio.dtl",
 "timeline_1": "res://game/dialogic/timelines/timeline_1.dtl",
 "timeline_2": "res://game/dialogic/timelines/timeline_2.dtl"
 }
@@ -48,11 +66,11 @@ text/text_reveal_skip_delay=0.1
 text/advance_delay=0.1
 text/autoadvance_per_character_delay=0.1
 text/autoadvance_ignored_characters_enabled=true
-animations/join_default_length=0.5
+animations/join_default_length=0.0
 animations/join_default_wait=true
-animations/leave_default_length=0.5
+animations/leave_default_length=0.0
 animations/leave_default_wait=true
-animations/cross_fade_default_length=0.5
+animations/cross_fade_default_length=0.0
 choices/autofocus_first=true
 choices/delay=0.2
 choices/reveal_delay=0
@@ -101,6 +119,12 @@ version_control/autoload_on_startup=true
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/dialogic/plugin.cfg")
+
+[file_customization]
+
+folder_colors={
+"res://game/dialogic/timelines/": "orange"
+}
 
 [input]
 

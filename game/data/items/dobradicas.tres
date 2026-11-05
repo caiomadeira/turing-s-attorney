@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://game/ui/items/dobradicas.svg" id="1_icon"]
+[ext_resource type="Script" uid="uid://draj807mgbd6w" path="res://game/resources/item_data.gd" id="2_item"]
+
+[resource]
+script = ExtResource("2_item")
+id = "dobradicas"
+display_name = "Dobradiças da porta"
+description = "As dobradiças da porta do apartamento 12 ficam do lado de dentro, como em todas as portas do prédio. A porta foi instalada do jeito certo."
+icon = ExtResource("1_icon")

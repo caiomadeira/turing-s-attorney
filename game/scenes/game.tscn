@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://game/scenes/ui/inventory_panel.tscn" id="2_inventory"]
 [ext_resource type="Script" uid="uid://cipcbw8ibb43v" path="res://game/scripts/item_toast.gd" id="3_toast"]
 [ext_resource type="PackedScene" path="res://game/scenes/ui/note_viewer.tscn" id="4_note"]
+[ext_resource type="Script" uid="uid://d2fybwy548h8f" path="res://game/scripts/credibility_bar.gd" id="5_credibility"]
 
 [node name="Game" type="Control" unique_id=1023878334]
 layout_mode = 3
@@ -39,10 +40,25 @@ text = "Inventário"
 [node name="InventoryPanel" parent="HUD" unique_id=647860841 instance=ExtResource("2_inventory")]
 unique_name_in_owner = true
 
-[node name="NoteLayer" type="CanvasLayer" parent="."]
+[node name="CredibilityLayer" type="CanvasLayer" parent="." unique_id=816019754]
+layer = 50
+
+[node name="CredibilityBar" type="Control" parent="CredibilityLayer" unique_id=127699173]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 84.0
+offset_right = 252.0
+offset_bottom = 120.0
+mouse_filter = 2
+script = ExtResource("5_credibility")
+
+[node name="NoteLayer" type="CanvasLayer" parent="." unique_id=2073792850]
 layer = 20
 
-[node name="NoteViewer" parent="NoteLayer" instance=ExtResource("4_note")]
+[node name="NoteViewer" parent="NoteLayer" unique_id=1685046705 instance=ExtResource("4_note")]
 unique_name_in_owner = true
 
 [node name="ToastLayer" type="CanvasLayer" parent="." unique_id=1947554282]
