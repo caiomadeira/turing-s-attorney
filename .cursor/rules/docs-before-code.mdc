@@ -1,0 +1,21 @@
+---
+description: Consult Dialogic and Godot docs before writing or changing game code
+alwaysApply: true
+---
+
+# Docs before code
+
+Godot 4.7 (`config/features` includes `4.7`) with Dialogic 2. Game code is under `game/`. Leave `addons/dialogic/` unchanged unless the user explicitly asks to edit the plugin.
+
+Before writing, editing, or debugging GDScript, scenes (`.tscn`), resources, or Dialogic files (`.dtl`, `.dch`, styles), read the matching official pages. Do this on every code change, including APIs that seem familiar.
+
+1. Name the Godot class, signal, or node, and the Dialogic subsystem or event the change depends on.
+2. Fetch those pages before proposing or applying code. Open the specific class or guide, not only the homepage:
+   - Godot stable: https://docs.godotengine.org/en/stable/
+   - Dialogic 2: https://docs.dialogic.pro/
+3. Use the available doc tools (Context7, Firecrawl, or web fetch) to read the pages in the current turn.
+4. Follow the documented API. When memory and the docs disagree, the docs win. If a page is missing or unclear, say so. Do not invent methods, signals, or Dialogic event syntax.
+
+Example: before `Dialogic.start()`, open the Dialogic code-access and timeline pages on https://docs.dialogic.pro/ and confirm the method, arguments, and signals. Before `AnimationPlayer` or `Area2D`, open that class under https://docs.godotengine.org/en/stable/.
+
+Answers that depend on engine or plugin behavior should cite the page that was read, even when no file changes.

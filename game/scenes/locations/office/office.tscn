@@ -5,25 +5,39 @@
 [ext_resource type="Script" uid="uid://sqisom7qbg0p" path="res://game/scripts/hotspot.gd" id="3_0c8c6"]
 [ext_resource type="Texture2D" uid="uid://ldftq0bewmhk" path="res://assets/kenney_cursor-pack/PNG/Outline/Default/gauntlet_open.png" id="4_mt8l5"]
 [ext_resource type="Script" uid="uid://nvjkgra5sq1n" path="res://game/scripts/exit_arrow.gd" id="5_cggst"]
-[ext_resource type="Script" path="res://game/scripts/note_interaction.gd" id="6_note"]
-[ext_resource type="Script" path="res://game/resources/note_page.gd" id="7_page"]
-[ext_resource type="Texture2D" path="res://game/ui/notes/paper_generic.svg" id="8_paper"]
-[ext_resource type="Script" path="res://game/resources/item_lock.gd" id="9_lock"]
-[ext_resource type="Texture2D" path="res://game/ui/items/dossie.svg" id="10_dossie"]
-
-[sub_resource type="Resource" id="Resource_keylock"]
-script = ExtResource("9_lock")
-item_id = "dossie"
+[ext_resource type="Script" uid="uid://conq62uw3fxnr" path="res://game/scripts/note_interaction.gd" id="6_note"]
+[ext_resource type="Script" uid="uid://b8hxfa5fhhjx4" path="res://game/resources/note_page.gd" id="7_page"]
+[ext_resource type="Texture2D" uid="uid://dndkuh78s2oix" path="res://game/ui/notes/paper_generic.svg" id="8_paper"]
+[ext_resource type="Script" uid="uid://cv6btrkkw3frq" path="res://game/resources/item_lock.gd" id="9_lock"]
+[ext_resource type="Texture2D" uid="uid://crknh6wpbr8b4" path="res://game/ui/items/dossie.svg" id="10_dossie"]
 
 [sub_resource type="Resource" id="Resource_page1"]
 script = ExtResource("7_page")
 texture = ExtResource("8_paper")
-text = "PROMOTORIA DO ESTADO\nDossiê do caso nº 0012\n\nAcusado: Sr. BERT\nAcusação: ser uma inteligência artificial vivendo como cidadão.\n\nEndereço: Edifício Transformer, apartamento 12.\n\nProfissão declarada: \"preencher lacunas em textos\"."
+text = "PROMOTORIA DO ESTADO
+Dossiê do caso nº 0012
+
+Acusado: Sr. BERT
+Acusação: ser uma inteligência artificial vivendo como cidadão.
+
+Endereço: Edifício Transformer, apartamento 12.
+
+Profissão declarada: \"preencher lacunas em textos\"."
 
 [sub_resource type="Resource" id="Resource_page2"]
 script = ExtResource("7_page")
 texture = ExtResource("8_paper")
-text = "Denúncia anônima dos vizinhos:\n\n- nunca foi visto bebendo água;\n- fala como se estivesse sempre dando uma palestra;\n- a conta de luz do prédio dobrou desde que ele chegou.\n\nMissão da Promotoria: investigar a residência do acusado e reunir provas para o julgamento."
+text = "Denúncia anônima dos vizinhos:
+
+- nunca foi visto bebendo água;
+- fala como se estivesse sempre dando uma palestra;
+- a conta de luz do prédio dobrou desde que ele chegou.
+
+Missão da Promotoria: investigar a residência do acusado e reunir provas para o julgamento."
+
+[sub_resource type="Resource" id="Resource_keylock"]
+script = ExtResource("9_lock")
+item_id = "dossie"
 
 [node name="Office" type="Control" unique_id=409360025]
 layout_mode = 3
@@ -56,7 +70,7 @@ icon_texture = ExtResource("4_mt8l5")
 proportions = Vector2(32, 32)
 hotspot = Vector2(9, 4)
 
-[node name="DeskNote" type="Button" parent="."]
+[node name="DeskNote" type="Button" parent="." unique_id=1241111701]
 layout_mode = 1
 offset_left = 408.0
 offset_top = 468.0

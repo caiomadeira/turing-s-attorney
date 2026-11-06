@@ -27,9 +27,13 @@ Juiz (normal): Promotor, apresente seu argumento.
 	# PROVISÓRIO: usa o depoimento do porteiro (fala do pitch) como pista falsa.
 	Pericles: Quero dizer algo sobre a testemunha.
 	if Inventory.has("depoimento_porteiro"):
-		Pericles (objecao): O porteiro do prédio me contou que viu o réu devorar uma placa de vídeo inteira!
-		Bert: Protesto! A minha placa de vídeo está inteirinha, dentro do meu computador. O promotor esteve no meu apartamento, ele viu.
-		Juiz (bravo): E o próprio porteiro não disse primeiro que não sabia de nada? Não traga fofoca para o meu tribunal, promotor.
+		Pericles (objecao): O porteiro do prédio me contou que ouviu alguém dizer que o réu devorou uma placa de vídeo inteira!
+		Bert: Protesto! A minha placa de vídeo está inteirinha, dentro do meu computador.
+		Pericles (sem_graca): É... Realmente tinha uma placa de vídeo inteira dentro do computador.
+		Pericles (objecao): M-Mas não quer dizer que você não tenha comido outra placa de vídeo!
+		Juiz (bravo): E você consegue provar isso?
+		Pericles (sem_graca): ..... N-Não, Excelência.
+		Juiz (bravo):  Não traga fofoca para o meu tribunal, promotor.
 	else:
 		Juiz (normal): Que testemunha? O senhor não ouviu testemunha nenhuma na sua investigação.
 		Pericles (sem_graca): Eh... é verdade, Meritíssimo.

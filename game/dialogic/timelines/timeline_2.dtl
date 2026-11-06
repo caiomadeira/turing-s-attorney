@@ -1,12 +1,25 @@
 # Porteiro (testemunha). Pressionar funciona e rende o depoimento.
+join Pericles left
 Pericles: Bom dia. O senhor conhece o morador do apartamento 12, o Sr. BERT?
-Testemunha: Eu já disse. Não sei de nada.
+join Testemunha right
+Testemunha: Hmmm ja vi ele algumas vezes, mas não o conheço muito bem.
 - Pressionar
-	Pericles (objecao): O senhor é o porteiro! Vê todo mundo que entra e sai deste prédio. Não sabe de nada mesmo?
-	Testemunha (nervoso): <Empty Text Event>
-	Testemunha (nervoso): Ele abriu e era uma ´Ele devorou uma placa de vídeo inteira!
+	Pericles (objecao): O senhor é o porteiro e segurança! Vê todo mundo que entra e sai deste prédio e o que elas fazem. Não sabe de nada mesmo?
+	update Pericles (normal)
+	Testemunha (nervoso): Ta bom ta bom. Não sei se devia falar isso...
+	Testemunha (normal): Mas teve um dia que eu estava conversando com a senhorinha que mora no apartamento 9, a Dona Rosinha.
+	Testemunha (normal): E ela me contou que um dia, no meio da noite, ela ouviu uns barulhos estranhos...
+	Testemunha (normal): Como se tivesse alguém mastigando algo muito crocante.
+	Testemunha (normal): Ela decidiu ir pra fora dar uma olhada, e percebeu que o som estava vindo do apartameto 12. A porta estava entreaberta, por isso o som estava mais alto que o comum...
+	Testemunha (normal): Como ela é meio fofoqueira, decidiu dar uma espiadinha.
+	Testemunha (normal): Então ela chegou perto da porta e começou a abri-la devargazinho...
+	Testemunha (normal): Quando ela olha pra dentro percebeu que...
+	update Testemunha [animation="Shake Y"]
+	Testemunha (nervoso): O Sr. BERT ESTAVA DEVORANDO UMA PLACA DE VÍDEO INTEIRA!!!
+	Testemunha (normal): Pelo menos é o que ela conta...
 	[signal arg="give_item:depoimento_porteiro"]
 	[signal arg="set_flag:pressionou_porteiro"]
 	Pericles (pensando): Uma placa de vídeo inteira... Vou anotar isso.
+	Pericles (normal): Obrigado senhor.
 - Ir embora
 	Pericles (sem_graca): Tudo bem. Desculpe o incômodo.
