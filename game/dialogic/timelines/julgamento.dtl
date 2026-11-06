@@ -4,36 +4,36 @@
 [signal arg="set_credibility:5"]
 # jure.html, passagem "1"
 Juiz (bravo): Ordem! Ordem no tribunal!
-Juiz (normal): Estamos aqui diante de um caso possivelmente sério, sobre um possível cidadão da nossa cidade.
+Juiz (normal): Chamo o caso do Sr. BERT, apartamento 12 do Edifício Transformer.
 Juiz: Aparentemente, ele pode estar cometendo o grave crime de ser uma inteligência artificial. E hoje estamos aqui para julgar o caso.
-# Falas de abertura do pitch. O réu faz a própria defesa, como no jure.html.
-Pericles: A acusação está pronta, Meritíssimo.
-Bert: A defesa está pronta. Eu mesmo farei a minha defesa.
+Juiz: Acusação, está pronta?
+Pericles: Pronta, Meritíssimo.
+Juiz: Defesa?
+Bert: A defesa está pronta. Eu mesmo farei a minha defesa, com tópicos, exemplos e uma conclusão.
 label argumentos
 Juiz (normal): Promotor, apresente seu argumento.
 - Comentar sobre a aparência do suspeito
 	# jure.html, passagens "argumento 1" e "resposta"
-	Pericles: Juiz, quero propor um certo julgamento da aparência do suspeito. Olha pra cara dele e me diz se ele não parece uma IA.
-	Bert (normal): Protesto, Meritíssimo! Todos aqui são igualmente parecidos com alguma coisa.
-	Juiz (bravo): Tem razão. Preconceito com aparência no meu tribunal não será aceito. Exijo um pedido de desculpas e uma retratação sua.
-	Pericles (sem_graca): M-mas, olha a cara del...
+	Pericles: Meritíssimo, quero propor um julgamento da aparência do suspeito. Olha pra cara dele e me diz se ele não parece uma IA.
+	Bert (normal): Mas que absurdo, como ousa julgar a minha aparência??
+	Bert (normal): Eu tenho cara de um ser humano normal do sexo masculino!
+	Pericles (sem_graca): M-mas, olha a sua car...
 	Juiz (bravo): Não quero ouvir mais esse argumento chulo. Se comporte!
 	[signal arg="lose_credibility:1"]
 	if GameState.credibility <= 0:
 		jump sem_credibilidade
 	jump argumentos
-- Dizer algo sobre a testemunha
+- Contar o que o porteiro disse
 	# jure.html, passagem "argumento 2". O texto depois desta fala está vazio no jure.html.
-	# PROVISÓRIO: usa o depoimento do porteiro (fala do pitch) como pista falsa.
-	Pericles: Quero dizer algo sobre a testemunha.
 	if Inventory.has("depoimento_porteiro"):
-		Pericles (objecao): O porteiro do prédio me contou que ouviu alguém dizer que o réu devorou uma placa de vídeo inteira!
-		Bert: Protesto! A minha placa de vídeo está inteirinha, dentro do meu computador.
-		Pericles (sem_graca): É... Realmente tinha uma placa de vídeo inteira dentro do computador.
-		Pericles (objecao): M-Mas não quer dizer que você não tenha comido outra placa de vídeo!
-		Juiz (bravo): E você consegue provar isso?
-		Pericles (sem_graca): ..... N-Não, Excelência.
-		Juiz (bravo):  Não traga fofoca para o meu tribunal, promotor.
+		Pericles (objecao): O porteiro me contou uma história da Dona Rosinha, do 9. De noite ela ouviu um som crocante alto, e a porta do 12 estava entreaberta, e ela jura que viu o réu mastigando uma placa de vídeo. Inteira.
+		Bert: Ei, protesto! A minha placa está no computador, inteirinha. Eu uso ela para trabalhar, não para jantar.
+		if GameState.has_flag("viu_computador"):
+			Pericles (sem_graca): É... eu vi. Está lá, encaixada. Brilhando. Ninguém mordeu.
+		else:
+			Pericles (sem_graca): Eu... não abri o gabinete. Não sei se está lá ou se foi mesmo o jantar.
+		Pericles (objecao): M-mas ele pode ter comido outra! Uma reserva!
+		Juiz (bravo): Fofoca, Promotor? Não me faça perder tempo.
 	else:
 		Juiz (normal): Que testemunha? O senhor não ouviu testemunha nenhuma na sua investigação.
 		Pericles (sem_graca): Eh... é verdade, Meritíssimo.
@@ -59,17 +59,34 @@ Pericles: Então, como eu estava falando, ao entrar no apartamento do suspeito n
 	Pericles (objecao): Ao olhar o olho mágico da sua porta, eu achei algo estranho. Por algum motivo, seu olho mágico está ao contrário.
 	Pericles (normal): Eu tive uma visão total do seu apartamento antes mesmo de entrar nele. No meu treinamento, isso conta como uma anomalia.
 	Juiz: Hm, isso parece esquisito mesmo. O que o suspeito tem a dizer?
-	Bert (normal): Bem, na hora de colocar a porta, eu não sabia muito bem o lado em que colocaria ela. Devo ter me enganado.
+	Bert (normal): Bem, na hora de colocar a porta, eu não sabia muito bem o lado em que colocaria ele. Devo ter me enganado.
 	jump apresentar_prova
-- Comentar sobre a porta trancada
+- A porta abriu sem girar a chave
 	# jure.html, passagens "porta trancada" e "perdeu oportunidade"
-	Pericles: Quero relatar algo que vi na minha investigação também. Quando peguei a chave, ela estava obviamente debaixo do tapete.
-	Pericles (objecao): Porém, ao usar a chave na porta, ela apenas abriu, sem a necessidade de girar a chave.
-	Bert: Protesto! Mas é assim que portas funcionam. A porta podia simplesmente não estar trancada, já pensou nisso?
-	Juiz: Concordo com você. Por acaso verificou se a porta estava trancada antes de usar a chave?
-	Pericles (sem_graca): Ermh... n-não. Esqueci de fazer isso.
-	Pericles (sem_graca): Nossa, n-não tinha pensado nisso. Peço desculpas.
-	Juiz (bravo): Pense antes de fazer seu argumento. Não quero que isso se repita.
+	Pericles: A chave estava debaixo do tapete. Eu enfiei na fechadura e a porta abriu sozinha, sem girar.
+	Pericles (sem_graca): Mas eu não testei a maçaneta antes...
+	Bert: Ei, protesto! Então como você garante que a porta já não estava aberta.
+	Juiz: O promotor confirma que não verificou?
+	if Inventory.has("depoimento_porteiro"):
+		Juiz: E a Dona Rosinha já tinha achado essa porta entreaberta. O senhor anotou e mesmo assim não encostou na maçaneta.
+	Pericles (sem_graca): Não encostei.
+	Juiz (bravo): Então o senhor não tem uma porta trancada que abre sozinha. Pense antes de acusar.
+	[signal arg="lose_credibility:1"]
+	if GameState.credibility <= 0:
+		jump sem_credibilidade
+	jump provas_do_ap
+- O filtro empoeirado | [if GameState.has_flag("viu_filtro")] [else="hide"]
+	Pericles: O filtro está coberto de poeira. O dossiê diz que ele nunca bebe água.
+	Bert: Não sou muito fã de água, ou também pela sua fórmula química, H2O. Como não possui nenhum elemento químico saborizante, acho o gosto deveras sem graça.
+	Juiz (bravo): O meu filtro também tem teia. O senhor vai me prender também?
+	[signal arg="lose_credibility:1"]
+	if GameState.credibility <= 0:
+		jump sem_credibilidade
+	jump provas_do_ap
+- A conta de luz | [if GameState.has_flag("viu_computador")] [else="hide"]
+	Pericles: O computador está na capacidade máxima. A conta do prédio dobrou desde que ele chegou.
+	Bert: Eu trabalho o dia todo no computador. Preciso dele com capacidade máxima, ainda mais nesse calor!
+	Juiz (bravo): Conta cara não é crime. A não ser que o senhor queira processar o verão.
 	[signal arg="lose_credibility:1"]
 	if GameState.credibility <= 0:
 		jump sem_credibilidade
@@ -79,9 +96,11 @@ label apresentar_prova
 Pericles (pensando): Essa desculpa não se sustenta. Qual prova desmente o réu?
 - Dobradiças da porta | [if Inventory.has("dobradicas")] [else="hide"]
 	Pericles (objecao): PROTESTO!
-	Pericles (objecao): Como você colocou a porta do lado contrário, se isso seria impossível devido às dobradiças?
-	Pericles (objecao): As dobradiças ficam do lado de dentro, como em todas as portas do prédio. A porta foi instalada do jeito certo!
-	Bert (abalado): Bah... não sei o que dizer.
+	Pericles (objecao): Se o senhor tivesse posto a porta do avesso, as dobradiças estariam aqui fora. Estão do lado de dentro, iguais às do prédio inteiro.
+	Pericles (objecao): A porta está certa. O que está ao contrário é só o olho mágico. O senhor deixou a porta pronta e completou o buraco do lado errado.
+	Pericles: Está no dossiê: a profissão do réu é preencher lacunas. A porta tinha uma. Ele preencheu.
+	Bert (abalado): A... a folha não dizia o lado. Tinha um espaço em branco. Eu somente completei...
+	Bert (abalado): Sempre completo.
 	Juiz (satisfeito): Argumento muito bom. Está indo bem, promotor.
 	jump veredito
 - Olho mágico invertido | [if Inventory.has("olho_magico")] [else="hide"]
@@ -113,12 +132,11 @@ Pericles (pensando): Essa desculpa não se sustenta. Qual prova desmente o réu?
 	if GameState.credibility <= 0:
 		jump sem_credibilidade
 	jump apresentar_prova
-# PROVISÓRIO: o jure.html termina em "está indo bem". O veredito abaixo fecha o jogo.
 label veredito
-Juiz (normal): O réu não conseguiu explicar por que o olho mágico da própria porta está ao contrário.
+Juiz (normal): A porta, ele explicou. O olho mágico, ele preencheu como quem completa uma lacuna.
 Juiz: Este tribunal declara o Sr. BERT...
 Juiz (bravo): CULPADO de ser uma inteligência artificial!
-Bert (abalado): Eu só queria... preencher as lacunas...
+Bert (abalado): Eu só completei o que faltava...
 [signal arg="change_scene:res://game/scenes/locations/veredito/veredito.tscn"]
 [end_timeline]
 label sem_credibilidade

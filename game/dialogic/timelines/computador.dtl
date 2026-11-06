@@ -1,4 +1,9 @@
 # Pista falsa: a placa de vídeo está inteira, ao contrário do que disse o porteiro.
 Pericles: Um computador ligado no máximo, com as ventoinhas gritando.
 Pericles: A placa de vídeo está aqui, inteirinha, encaixada no lugar.
-Pericles (pensando): Deve gastar uma energia absurda... Mas gastar energia não é crime. Talvez crime ambiental....
+Pericles (pensando): O dossiê diz que a conta de luz dobrou desde que ele chegou. Com essas ventoinhas, até eu dobraria. Gastar energia não é o crime.
+Pericles (pensando): Talvez crime ambiental...
+if Inventory.has("depoimento_porteiro"):
+	Pericles (pensando): E a placa está inteira. A história da Dona Rosinha não fecha. A não ser que ele tenha comido outra.
+	Pericles (pensando): Não sei...
+[signal arg="set_flag:viu_computador"]

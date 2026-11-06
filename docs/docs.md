@@ -929,7 +929,7 @@ Três fases: o caso chega, a investigação e o julgamento. O roteiro do julgame
 | --- | --- | --- |
 | Portaria | `locations/lobby/lobby.tscn` | `portaria_entrada.dtl` na chegada. A testemunha (`timeline_2.dtl`) pode ser pressionada: rende `depoimento_porteiro` e grava `pressionou_porteiro`. |
 | Corredor | `locations/corredor/corredor.tscn` | Olho mágico (`olho_magico.dtl`) rende `olho_magico`. Tapete (`tapete.dtl`) rende `chave_apartamento`. Porta (`porta.dtl`): sem a chave, só comenta; com a chave, rende `porta_sem_girar`, grava `abriu_porta` e entra no apartamento. |
-| Apartamento | `locations/apartamento/apartamento.tscn` | Porta por dentro (`dobradicas.dtl`) rende `dobradicas`. Computador e filtro são pistas falsas, só fala. |
+| Apartamento | `locations/apartamento/apartamento.tscn` | Porta por dentro (`dobradicas.dtl`) rende `dobradicas`. Computador (`computador.dtl`) grava `viu_computador`. Filtro (`filtro.dtl`) grava `viu_filtro`. Os dois são pistas falsas: a fala descarta a conta de luz e a água do dossiê. |
 
 Quando o jogador tem `olho_magico` e `dobradicas`, a timeline que deu o segundo item grava `investigacao_completa`. Essa flag mostra o botão "Ir ao tribunal" no corredor e no apartamento.
 
@@ -940,8 +940,10 @@ Quando o jogador tem `olho_magico` e `dobradicas`, a timeline que deu o segundo 
 | Escolha | Resultado |
 | --- | --- |
 | Aparência do suspeito | Perde 1 losango e volta aos argumentos |
-| Testemunha | Perde 1 losango e volta aos argumentos (texto provisório: o `jure.html` não tem esta parte) |
-| Investigação, porta trancada | Perde 1 losango e volta às provas do apartamento |
+| Testemunha | Perde 1 losango e volta aos argumentos. Cita a Dona Rosinha. Se o jogador viu o computador, Péricles admite que a placa está inteira |
+| Investigação, a porta abriu sem girar a chave | Perde 1 losango e volta às provas do apartamento. Se houver depoimento, o juiz lembra a porta entreaberta da Rosinha |
+| Investigação, filtro empoeirado | Só aparece com `viu_filtro`. Perde 1 losango e volta às provas do apartamento |
+| Investigação, conta de luz | Só aparece com `viu_computador`. Perde 1 losango e volta às provas do apartamento |
 | Investigação, olho mágico | O réu se defende e o jogador apresenta uma prova |
 | Prova: dobradiças da porta | Vence: veredito em `locations/veredito/veredito.tscn` |
 | Qualquer outra prova | Perde 1 losango e pergunta de novo |

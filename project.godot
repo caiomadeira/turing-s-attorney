@@ -34,10 +34,12 @@ directories/dch_directory={
 directories/dtl_directory={
 "apartamento_entrada": "res://game/dialogic/timelines/apartamento_entrada.dtl",
 "computador": "res://game/dialogic/timelines/computador.dtl",
+"computador_visto": "res://game/dialogic/timelines/computador_visto.dtl",
 "corredor_entrada": "res://game/dialogic/timelines/corredor_entrada.dtl",
 "dobradicas": "res://game/dialogic/timelines/dobradicas.dtl",
 "dobradicas_vistas": "res://game/dialogic/timelines/dobradicas_vistas.dtl",
 "filtro": "res://game/dialogic/timelines/filtro.dtl",
+"filtro_visto": "res://game/dialogic/timelines/filtro_visto.dtl",
 "intro": "res://game/dialogic/timelines/intro.dtl",
 "julgamento": "res://game/dialogic/timelines/julgamento.dtl",
 "mesa_vazia": "res://game/dialogic/timelines/mesa_vazia.dtl",
