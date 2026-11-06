@@ -108,11 +108,11 @@ Pericles (pensando): Essa desculpa não se sustenta. Qual prova desmente o réu?
 - Dobradiças da porta | [if GameState.can_speak("prova_dobradicas")] [else="hide"]
 	do GameState.speak_argument("prova_dobradicas")
 	Pericles (objecao): PROTESTO!
-	Pericles (objecao): Se o senhor tivesse posto a porta do avesso, as dobradiças estariam aqui fora. Estão do lado de dentro, iguais às do prédio inteiro.
+	Pericles (objecao): Se o senhor tivesse posto a porta do avesso, as dobradiças estariam do lado fora. Estão do lado de dentro, iguais às do prédio inteiro.
 	Pericles (objecao): A porta está certa. O que está ao contrário é só o olho mágico. O senhor deixou a porta pronta e completou o buraco do lado errado.
-	Pericles: Está no dossiê: a profissão do réu é preencher lacunas. A porta tinha uma. Ele preencheu.
+	Pericles: Está no dossiê: a profissão do réu é preencher lacunas. A porta tinha uma. Ele preencheu, só que preencheu do lado errado.
 	Bert (abalado): A... a folha não dizia o lado. Tinha um espaço em branco. Eu somente completei...
-	Bert (abalado): Sempre completo.
+	Bert (abalado): Sempre completo...
 	Juiz (satisfeito): Argumento muito bom. Está indo bem, promotor.
 	jump veredito
 - Olho mágico invertido | [if GameState.can_speak("prova_olho")] [else="hide"]
@@ -137,7 +137,7 @@ Pericles (pensando): Essa desculpa não se sustenta. Qual prova desmente o réu?
 	Juiz (bravo): Fofoca do porteiro não explica nada sobre essa porta.
 	jump sem_argumentos
 label veredito
-Juiz (normal): A porta, ele explicou. O olho mágico, ele preencheu como quem completa uma lacuna.
+Juiz (normal): Qualquer ser humano normal saberia que o olho mágico deve ficar de dentro. Somente uma IA mal treinada não saberia disso.
 Juiz: Este tribunal declara o Sr. BERT...
 Juiz (bravo): CULPADO de ser uma inteligência artificial!
 Bert (abalado): Eu só completei o que faltava...

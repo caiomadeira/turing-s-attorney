@@ -3,10 +3,11 @@ extends Control
 const START_SCENE := "res://game/scenes/locations/office/office.tscn"
 const TRIBUNAL_SCENE := "res://game/scenes/locations/tribunal/tribunal.tscn"
 const FIM_SCENE := "res://game/scenes/locations/fim_de_jogo/fim_de_jogo.tscn"
+const VEREDITO_SCENE := "res://game/scenes/locations/veredito/veredito.tscn"
 
 const _NO_COURT_SCENES: Array[String] = [
 	TRIBUNAL_SCENE,
-	"res://game/scenes/locations/veredito/veredito.tscn",
+	VEREDITO_SCENE,
 	FIM_SCENE,
 ]
 
@@ -80,10 +81,10 @@ func _on_location_changed(scene_path: String) -> void:
 	_apply_end_screen(scene_path)
 
 
-## No fim de jogo some inventário, losangos, nota e aviso de item.
+## No fim de jogo e no veredito somem inventário, losangos, nota e aviso de item.
 ## CanvasLayer.visible não altera o visible de cada filho.
 func _apply_end_screen(scene_path: String) -> void:
-	var on_end := scene_path == FIM_SCENE
+	var on_end := scene_path == FIM_SCENE or scene_path == VEREDITO_SCENE
 	_hud.visible = not on_end
 	_credibility_layer.visible = not on_end
 	_note_layer.visible = not on_end

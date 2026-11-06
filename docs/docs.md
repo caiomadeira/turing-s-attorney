@@ -12,7 +12,7 @@ A ordem no `project.godot` é a ordem de inicialização. Um autoload enxerga os
 
 `DialogueDirector` é o único script que chama `Dialogic.start()`.
 
-A raiz de `game.tscn` chama `SceneRouter.register_host()` com `%LocationHost`, abre `res://game/scenes/locations/office/office.tscn` e liga o botão Inventário a `InventoryPanel.toggle()`. O botão "Ir ao tribunal" fica no canto inferior direito e abre um `ConfirmationDialog`. "Ir" chama `SceneRouter.go_to()` com `locations/tribunal/tribunal.tscn`. "Ficar" e Esc cancelam. Ele só aparece depois que o jogador fecha o dossiê (`leu_dossie`). Em `dialogue_started`, esconde o painel, fecha a confirmação e desativa os dois botões. Em `dialogue_finished`, ativa de novo, salvo com a nota aberta. O botão some no tribunal, no veredito e no fim de jogo. No fim de jogo, as camadas `HUD`, `CredibilityLayer`, `NoteLayer` e `ToastLayer` ficam invisíveis: some o inventário, os losangos, a nota e o aviso de item. O layout do Dialogic, se ainda estiver na árvore, também some. `CanvasLayer.visible` não muda o `visible` de cada filho, então ao sair da tela o que já estava escondido continua escondido.
+A raiz de `game.tscn` chama `SceneRouter.register_host()` com `%LocationHost`, abre `res://game/scenes/locations/office/office.tscn` e liga o botão Inventário a `InventoryPanel.toggle()`. O botão "Ir ao tribunal" fica no canto inferior direito e abre um `ConfirmationDialog`. "Ir" chama `SceneRouter.go_to()` com `locations/tribunal/tribunal.tscn`. "Ficar" e Esc cancelam. Ele só aparece depois que o jogador fecha o dossiê (`leu_dossie`). Em `dialogue_started`, esconde o painel, fecha a confirmação e desativa os dois botões. Em `dialogue_finished`, ativa de novo, salvo com a nota aberta. O botão some no tribunal, no veredito e no fim de jogo. No fim de jogo e no veredito, as camadas `HUD`, `CredibilityLayer`, `NoteLayer` e `ToastLayer` ficam invisíveis: some o inventário, os losangos, a nota e o aviso de item. O layout do Dialogic, se ainda estiver na árvore, também some. `CanvasLayer.visible` não muda o `visible` de cada filho, então ao sair da tela o que já estava escondido continua escondido.
 
 O ponteiro do mouse é a imagem em `display/mouse_cursor/custom_image` do `project.godot`.
 
@@ -169,7 +169,7 @@ Grava `falou_` mais o id. Um id fora de `SPOKEN_ARGUMENTS` gera um aviso e não 
 
 ### void reset()
 
-Apaga todas as flags e devolve `credibility` a `MAX_CREDIBILITY`. Emite `flag_changed` com `false` para cada flag que existia, e `credibility_changed`. O botão "Reiniciar o jogo" na tela de fim de jogo chama este método.
+Apaga todas as flags e devolve `credibility` a `MAX_CREDIBILITY`. Emite `flag_changed` com `false` para cada flag que existia, e `credibility_changed`. O botão "Reiniciar o jogo", nas telas de fim de jogo e de veredito, chama este método.
 
 ---
 
@@ -976,9 +976,9 @@ Três fases: o caso chega, a investigação e o julgamento. O roteiro do julgame
 | --- | --- | --- |
 | Portaria | `locations/lobby/lobby.tscn` | `portaria_entrada.dtl` na chegada. A testemunha (`timeline_2.dtl`) pode ser pressionada: rende `depoimento_porteiro` e grava `pressionou_porteiro`. |
 | Corredor | `locations/corredor/corredor.tscn` | Olho mágico (`olho_magico.dtl`) rende `olho_magico`. Tapete (`tapete.dtl`) rende `chave_apartamento`. Porta (`porta.dtl`): sem a chave, só comenta; com a chave, rende `porta_sem_girar`, grava `abriu_porta` e entra no apartamento. |
-| Apartamento | `locations/apartamento/apartamento.tscn` | Porta por dentro (`dobradicas.dtl`) rende `dobradicas`. Computador (`computador.dtl`) grava `viu_computador`. Filtro (`filtro.dtl`) grava `viu_filtro`. Os dois são pistas falsas: a fala descarta a conta de luz e a água do dossiê. |
+| Apartamento | `locations/apartamento/apartamento.tscn` | A porta inteira sai para o corredor. As dobradiças (`dobradicas.dtl`) rendem `dobradicas`. Computador (`computador.dtl`) grava `viu_computador`. Filtro (`filtro.dtl`) grava `viu_filtro`. Os dois são pistas falsas: a fala descarta a conta de luz e a água do dossiê. |
 
-O dossiê na mesa só abre com `pegou_dossie`. Ao fechar o leitor, a nota grava `leu_dossie`. Aí o botão "Ir ao tribunal" aparece no canto inferior direito, no escritório, na portaria, no corredor e no apartamento. O clique abre a confirmação. "Ir" muda para o tribunal. "Ficar" e Esc ficam na investigação. O botão some no tribunal, no veredito e no fim de jogo, e fica desligado durante diálogo e nota. No fim de jogo o restante do HUD também some.
+O dossiê na mesa só abre com `pegou_dossie`. Ao fechar o leitor, a nota grava `leu_dossie`. Aí o botão "Ir ao tribunal" aparece no canto inferior direito, no escritório, na portaria, no corredor e no apartamento. O clique abre a confirmação. "Ir" muda para o tribunal. "Ficar" e Esc ficam na investigação. O botão some no tribunal, no veredito e no fim de jogo, e fica desligado durante diálogo e nota. No fim de jogo e no veredito o restante do HUD também some.
 
 Quando o jogador tem `olho_magico` e `dobradicas`, a timeline que deu o segundo item grava `investigacao_completa` e o Péricles avisa que já dá para acusar. A flag não trava a viagem.
 
@@ -999,4 +999,4 @@ Quando o jogador tem `olho_magico` e `dobradicas`, a timeline que deu o segundo 
 | Prova: dobradiças da porta | Uma vez, e só com `dobradicas`. Vence: veredito em `locations/veredito/veredito.tscn` |
 | Qualquer outra prova | Uma vez, se o jogador tiver o item. O juiz recusa e o caso acaba na mesma derrota de "não tenho mais nada", sem tirar losango e sem a fala de credibilidade |
 
-Sem losangos, a timeline pula para `sem_credibilidade` e vai para `locations/fim_de_jogo/fim_de_jogo.tscn`. Nessa tela o HUD some. O botão "Tentar o julgamento de novo" volta ao tribunal com 5 losangos e com as falas liberadas de novo; os itens continuam no inventário. O botão "Reiniciar o jogo" apaga flags e itens e abre o escritório de novo.
+Sem losangos, a timeline pula para `sem_credibilidade` e vai para `locations/fim_de_jogo/fim_de_jogo.tscn`. Nessa tela, e no veredito, o HUD some. O botão "Tentar o julgamento de novo" volta ao tribunal com 5 losangos e com as falas liberadas de novo; os itens continuam no inventário. O botão "Reiniciar o jogo", nessa tela e no veredito, apaga flags e itens e abre o escritório de novo.

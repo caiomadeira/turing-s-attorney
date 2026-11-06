@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://covpu5ke1blyb"]
 
 [ext_resource type="Script" uid="uid://demms3tchpq4x" path="res://game/scripts/location.gd" id="1_location"]
+[ext_resource type="Script" uid="uid://b2ulmsj4s0hv4" path="res://game/scripts/game_restart.gd" id="2_restart"]
 
 [node name="Veredito" type="Control" unique_id=1221436901]
 layout_mode = 3
@@ -29,9 +30,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -420.0
-offset_top = -180.0
+offset_top = -220.0
 offset_right = 420.0
-offset_bottom = 180.0
+offset_bottom = 220.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -58,3 +59,11 @@ theme_override_font_sizes/font_size = 26
 text = "Fim de jogo. Mandou bem."
 horizontal_alignment = 1
 autowrap_mode = 3
+
+[node name="Restart" type="Button" parent="Center"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+text = "Reiniciar o jogo"
+script = ExtResource("2_restart")
