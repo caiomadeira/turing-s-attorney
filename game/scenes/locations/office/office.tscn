@@ -83,6 +83,7 @@ expand_icon = true
 script = ExtResource("6_note")
 pages = Array[ExtResource("7_page")]([SubResource("Resource_page1"), SubResource("Resource_page2")])
 required_flag = "pegou_dossie"
+read_flag = "leu_dossie"
 icon_texture = ExtResource("4_mt8l5")
 proportions = Vector2(32, 32)
 hotspot = Vector2(9, 4)

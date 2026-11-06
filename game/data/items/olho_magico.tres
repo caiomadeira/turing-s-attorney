@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("2_item")
 id = "olho_magico"
+kind = 1
 display_name = "Olho mágico invertido"
 description = "O olho mágico da porta do apartamento 12 está ao contrário: do corredor, dá para ver o apartamento inteiro."
 icon = ExtResource("1_icon")

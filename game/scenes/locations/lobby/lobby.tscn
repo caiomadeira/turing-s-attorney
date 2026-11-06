@@ -2,9 +2,10 @@
 
 [ext_resource type="Script" uid="uid://demms3tchpq4x" path="res://game/scripts/location.gd" id="1_y4idt"]
 [ext_resource type="Texture2D" uid="uid://swnqhnme15k6" path="res://game/scenes/locations/lobby/pngtree-modern-hotel-lobby-with-elegant-reception-desk-and-luxurious-decor-picture-image_16535130.jpg" id="2_dao56"]
-[ext_resource type="Script" uid="uid://sqisom7qbg0p" path="res://game/scripts/hotspot.gd" id="2_fqaig"]
 [ext_resource type="Texture2D" uid="uid://ldftq0bewmhk" path="res://assets/kenney_cursor-pack/PNG/Outline/Default/gauntlet_open.png" id="3_dao56"]
+[ext_resource type="Texture2D" uid="uid://bgdlihp5bf433" path="res://game/dialogic/characters/Testemunha/porteiro_normal.png" id="3_ugk6w"]
 [ext_resource type="Script" uid="uid://nvjkgra5sq1n" path="res://game/scripts/exit_arrow.gd" id="4_ugk6w"]
+[ext_resource type="Script" uid="uid://dnv7r7qqb6ut1" path="res://game/scripts/texture_hotspot.gd" id="5_texhot"]
 
 [node name="Lobby" type="Control" unique_id=1111048883]
 layout_mode = 3
@@ -23,15 +24,16 @@ offset_right = 1283.0
 offset_bottom = 717.0
 texture = ExtResource("2_dao56")
 
-[node name="Witness" type="Button" parent="." unique_id=943388747]
-layout_mode = 1
-offset_left = 685.0
-offset_top = 317.0
-offset_right = 838.0
-offset_bottom = 596.0
-theme_override_font_sizes/font_size = 24
-text = "Testemunha"
-script = ExtResource("2_fqaig")
+[node name="Porteiro" type="TextureRect" parent="." unique_id=927729327]
+layout_mode = 0
+offset_left = 635.0
+offset_top = 301.0
+offset_right = 849.0
+offset_bottom = 576.0
+mouse_filter = 0
+texture = ExtResource("3_ugk6w")
+expand_mode = 1
+script = ExtResource("5_texhot")
 timeline = "uid://6oowwidxr0ac"
 timeline_if_flag = "res://game/dialogic/timelines/porteiro_depois.dtl"
 flag = "pressionou_porteiro"
@@ -49,10 +51,10 @@ offset_right = 140.0
 offset_bottom = 240.0
 grow_vertical = 2
 script = ExtResource("4_ugk6w")
-target_scene = "uid://dmtuvq61135ot"
 direction = 0
+target_scene = "uid://dmtuvq61135ot"
 
-[node name="ToCorredor" type="Button" parent="."]
+[node name="ToCorredor" type="Button" parent="." unique_id=1880772792]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0

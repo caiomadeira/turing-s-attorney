@@ -1,7 +1,10 @@
 # Fase 3: julgamento. Roteiro base: jure.html (Twine).
 # Cada argumento errado tira um losango. Sem losangos, o juiz encerra o caso (label sem_credibilidade).
+# Cada fala só entra uma vez. Sem a prova que vence, ou sem argumento nenhum, o caso acaba em sem_argumentos.
+# sem_argumentos encerra a timeline. Sem isso, o Dialogic continua e toca sem_credibilidade.
 [signal arg="set_flag:em_julgamento"]
 [signal arg="set_credibility:5"]
+do GameState.clear_spoken_arguments()
 # jure.html, passagem "1"
 Juiz (bravo): Ordem! Ordem no tribunal!
 Juiz (normal): Chamo o caso do Sr. BERT, apartamento 12 do Edifício Transformer.
@@ -12,57 +15,63 @@ Juiz: Defesa?
 Bert: A defesa está pronta. Eu mesmo farei a minha defesa, com tópicos, exemplos e uma conclusão.
 label argumentos
 Juiz (normal): Promotor, apresente seu argumento.
-- Comentar sobre a aparência do suspeito
+- Comentar sobre a aparência do suspeito | [if GameState.can_speak("aparencia")] [else="hide"]
 	# jure.html, passagens "argumento 1" e "resposta"
+	do GameState.speak_argument("aparencia")
 	Pericles: Meritíssimo, quero propor um julgamento da aparência do suspeito. Olha pra cara dele e me diz se ele não parece uma IA.
 	Bert (normal): Mas que absurdo, como ousa julgar a minha aparência??
 	Bert (normal): Eu tenho cara de um ser humano normal do sexo masculino!
 	Pericles (sem_graca): M-mas, olha a sua car...
 	Juiz (bravo): Não quero ouvir mais esse argumento chulo. Se comporte!
 	[signal arg="lose_credibility:1"]
-	if GameState.credibility <= 0:
-		jump sem_credibilidade
-	jump argumentos
-- Contar o que o porteiro disse
+	jump apos_argumento
+- Contar o que o porteiro disse | [if GameState.can_speak("porteiro")] [else="hide"]
 	# jure.html, passagem "argumento 2". O texto depois desta fala está vazio no jure.html.
-	if Inventory.has("depoimento_porteiro"):
-		Pericles (objecao): O porteiro me contou uma história da Dona Rosinha, do 9. De noite ela ouviu um som crocante alto, e a porta do 12 estava entreaberta, e ela jura que viu o réu mastigando uma placa de vídeo. Inteira.
-		Bert: Ei, protesto! A minha placa está no computador, inteirinha. Eu uso ela para trabalhar, não para jantar.
-		if GameState.has_flag("viu_computador"):
-			Pericles (sem_graca): É... eu vi. Está lá, encaixada. Brilhando. Ninguém mordeu.
-		else:
-			Pericles (sem_graca): Eu... não abri o gabinete. Não sei se está lá ou se foi mesmo o jantar.
-		Pericles (objecao): M-mas ele pode ter comido outra! Uma reserva!
-		Juiz (bravo): Fofoca, Promotor? Não me faça perder tempo.
+	do GameState.speak_argument("porteiro")
+	Pericles (objecao): O porteiro me contou uma história da Dona Rosinha, do 9. De noite ela ouviu um som crocante alto, e a porta do 12 estava entreaberta, e ela jura que viu o réu mastigando uma placa de vídeo. Inteira.
+	Bert: Ei, protesto! A minha placa está no computador, inteirinha. Eu uso ela para trabalhar, não para jantar.
+	if GameState.has_flag("viu_computador"):
+		Pericles (sem_graca): É... eu vi. Está lá, encaixada. Brilhando. Ninguém mordeu.
 	else:
-		Juiz (normal): Que testemunha? O senhor não ouviu testemunha nenhuma na sua investigação.
-		Pericles (sem_graca): Eh... é verdade, Meritíssimo.
-		Juiz (bravo): Então não me faça perder tempo.
+		Pericles (sem_graca): Eu... não abri o gabinete. Não sei se está lá ou se foi mesmo o jantar.
+	Pericles (objecao): M-mas ele pode ter comido outra! Uma reserva!
+	Juiz (bravo): Fofoca, Promotor? Não me faça perder tempo.
 	[signal arg="lose_credibility:1"]
-	if GameState.credibility <= 0:
-		jump sem_credibilidade
-	jump argumentos
-- Falar sobre a investigação
+	jump apos_argumento
+- Falar sobre a investigação | [if GameState.has_apartment_argument()] [else="hide"]
 	# jure.html, passagem "argumento 3"
 	Pericles: Quero falar algo que achei em minha investigação.
 	jump entrando_no_ap
+- Não tenho mais nada, Meritíssimo | [if not GameState.has_opening_argument()] [else="hide"]
+	Pericles (sem_graca): Não tenho mais nada, Meritíssimo.
+	jump sem_argumentos
+label apos_argumento
+if GameState.credibility <= 0:
+	jump sem_credibilidade
+jump argumentos
 # jure.html, passagem "entrando no ap"
 label entrando_no_ap
-Pericles: Quero comentar que, ao entrar em seu apartamen...
-Bert: Ei, protesto! Nunca te dei permissão para entrar em meu apartamento!
-Juiz (satisfeito): Ah, esqueci de dizer isso para você. O promotor tem total liberdade em sua investigação.
-Juiz (normal): Como estamos julgando algo sério aqui, ele pode fazer uma investigação mais pessoal e privada do suspeito.
+if GameState.has_flag("abriu_porta"):
+	Pericles: Quero comentar que, ao entrar em seu apartamen...
+	Bert: Ei, protesto! Nunca te dei permissão para entrar em meu apartamento!
+	Juiz (satisfeito): Ah, esqueci de dizer isso para você. O promotor tem total liberdade em sua investigação.
+	Juiz (normal): Como estamos julgando algo sério aqui, ele pode fazer uma investigação mais pessoal e privada do suspeito.
 label provas_do_ap
-Pericles: Então, como eu estava falando, ao entrar no apartamento do suspeito notei algumas coisas estranhas.
-- Comentar sobre o olho mágico
+if GameState.has_flag("abriu_porta"):
+	Pericles: Então, como eu estava falando, ao entrar no apartamento do suspeito notei algumas coisas estranhas.
+else:
+	Pericles: O que eu notei de estranho foi o seguinte.
+- Comentar sobre o olho mágico | [if GameState.can_speak("olho_magico")] [else="hide"]
 	# jure.html, passagem "olho magico"
+	do GameState.speak_argument("olho_magico")
 	Pericles (objecao): Ao olhar o olho mágico da sua porta, eu achei algo estranho. Por algum motivo, seu olho mágico está ao contrário.
 	Pericles (normal): Eu tive uma visão total do seu apartamento antes mesmo de entrar nele. No meu treinamento, isso conta como uma anomalia.
 	Juiz: Hm, isso parece esquisito mesmo. O que o suspeito tem a dizer?
 	Bert (normal): Bem, na hora de colocar a porta, eu não sabia muito bem o lado em que colocaria ele. Devo ter me enganado.
 	jump apresentar_prova
-- A porta abriu sem girar a chave
+- A porta abriu sem girar a chave | [if GameState.can_speak("porta_sem_girar")] [else="hide"]
 	# jure.html, passagens "porta trancada" e "perdeu oportunidade"
+	do GameState.speak_argument("porta_sem_girar")
 	Pericles: A chave estava debaixo do tapete. Eu enfiei na fechadura e a porta abriu sozinha, sem girar.
 	Pericles (sem_graca): Mas eu não testei a maçaneta antes...
 	Bert: Ei, protesto! Então como você garante que a porta já não estava aberta.
@@ -72,29 +81,32 @@ Pericles: Então, como eu estava falando, ao entrar no apartamento do suspeito n
 	Pericles (sem_graca): Não encostei.
 	Juiz (bravo): Então o senhor não tem uma porta trancada que abre sozinha. Pense antes de acusar.
 	[signal arg="lose_credibility:1"]
-	if GameState.credibility <= 0:
-		jump sem_credibilidade
-	jump provas_do_ap
-- O filtro empoeirado | [if GameState.has_flag("viu_filtro")] [else="hide"]
+	jump apos_pista
+- O filtro empoeirado | [if GameState.can_speak("filtro")] [else="hide"]
+	do GameState.speak_argument("filtro")
 	Pericles: O filtro está coberto de poeira. O dossiê diz que ele nunca bebe água.
 	Bert: Não sou muito fã de água, ou também pela sua fórmula química, H2O. Como não possui nenhum elemento químico saborizante, acho o gosto deveras sem graça.
 	Juiz (bravo): O meu filtro também tem teia. O senhor vai me prender também?
 	[signal arg="lose_credibility:1"]
-	if GameState.credibility <= 0:
-		jump sem_credibilidade
-	jump provas_do_ap
-- A conta de luz | [if GameState.has_flag("viu_computador")] [else="hide"]
+	jump apos_pista
+- A conta de luz | [if GameState.can_speak("conta_luz")] [else="hide"]
+	do GameState.speak_argument("conta_luz")
 	Pericles: O computador está na capacidade máxima. A conta do prédio dobrou desde que ele chegou.
 	Bert: Eu trabalho o dia todo no computador. Preciso dele com capacidade máxima, ainda mais nesse calor!
 	Juiz (bravo): Conta cara não é crime. A não ser que o senhor queira processar o verão.
 	[signal arg="lose_credibility:1"]
-	if GameState.credibility <= 0:
-		jump sem_credibilidade
+	jump apos_pista
+label apos_pista
+if GameState.credibility <= 0:
+	jump sem_credibilidade
+if GameState.has_apartment_argument():
 	jump provas_do_ap
+jump argumentos
 # O PROTESTO do jure.html vira o momento de apresentar a prova certa (mecânica do pitch).
 label apresentar_prova
 Pericles (pensando): Essa desculpa não se sustenta. Qual prova desmente o réu?
-- Dobradiças da porta | [if Inventory.has("dobradicas")] [else="hide"]
+- Dobradiças da porta | [if GameState.can_speak("prova_dobradicas")] [else="hide"]
+	do GameState.speak_argument("prova_dobradicas")
 	Pericles (objecao): PROTESTO!
 	Pericles (objecao): Se o senhor tivesse posto a porta do avesso, as dobradiças estariam aqui fora. Estão do lado de dentro, iguais às do prédio inteiro.
 	Pericles (objecao): A porta está certa. O que está ao contrário é só o olho mágico. O senhor deixou a porta pronta e completou o buraco do lado errado.
@@ -103,35 +115,27 @@ Pericles (pensando): Essa desculpa não se sustenta. Qual prova desmente o réu?
 	Bert (abalado): Sempre completo.
 	Juiz (satisfeito): Argumento muito bom. Está indo bem, promotor.
 	jump veredito
-- Olho mágico invertido | [if Inventory.has("olho_magico")] [else="hide"]
+- Olho mágico invertido | [if GameState.can_speak("prova_olho")] [else="hide"]
+	do GameState.speak_argument("prova_olho")
 	Pericles (objecao): Eu apresento... o olho mágico!
 	Juiz (bravo): Promotor, é justamente do olho mágico que estamos falando. Isso não desmente nada.
-	[signal arg="lose_credibility:1"]
-	if GameState.credibility <= 0:
-		jump sem_credibilidade
-	jump apresentar_prova
-- Chave debaixo do tapete | [if Inventory.has("chave_apartamento")] [else="hide"]
+	jump sem_argumentos
+- Chave debaixo do tapete | [if GameState.can_speak("prova_chave")] [else="hide"]
+	do GameState.speak_argument("prova_chave")
 	Pericles (objecao): Eu apresento... a chave que estava debaixo do tapete!
 	Bert: E o que a minha chave tem a ver com o lado da porta?
 	Juiz (bravo): Exatamente. Pense melhor, promotor.
-	[signal arg="lose_credibility:1"]
-	if GameState.credibility <= 0:
-		jump sem_credibilidade
-	jump apresentar_prova
-- Porta que abriu sem girar a chave | [if Inventory.has("porta_sem_girar")] [else="hide"]
+	jump sem_argumentos
+- Porta que abriu sem girar a chave | [if GameState.can_speak("prova_porta")] [else="hide"]
+	do GameState.speak_argument("prova_porta")
 	Pericles (objecao): Eu apresento... a porta que abriu sem girar a chave!
 	Juiz: Isso não tem relação nenhuma com o lado em que a porta foi instalada.
-	[signal arg="lose_credibility:1"]
-	if GameState.credibility <= 0:
-		jump sem_credibilidade
-	jump apresentar_prova
-- Depoimento do porteiro | [if Inventory.has("depoimento_porteiro")] [else="hide"]
+	jump sem_argumentos
+- Depoimento do porteiro | [if GameState.can_speak("prova_depoimento")] [else="hide"]
+	do GameState.speak_argument("prova_depoimento")
 	Pericles (objecao): Eu apresento... o depoimento do porteiro!
 	Juiz (bravo): Fofoca do porteiro não explica nada sobre essa porta.
-	[signal arg="lose_credibility:1"]
-	if GameState.credibility <= 0:
-		jump sem_credibilidade
-	jump apresentar_prova
+	jump sem_argumentos
 label veredito
 Juiz (normal): A porta, ele explicou. O olho mágico, ele preencheu como quem completa uma lacuna.
 Juiz: Este tribunal declara o Sr. BERT...
@@ -139,7 +143,13 @@ Juiz (bravo): CULPADO de ser uma inteligência artificial!
 Bert (abalado): Eu só completei o que faltava...
 [signal arg="change_scene:res://game/scenes/locations/veredito/veredito.tscn"]
 [end_timeline]
+label sem_argumentos
+Juiz (bravo): O senhor não tem mais o que apresentar.
+Juiz (bravo): Sem argumentos, o réu é considerado humano. Caso encerrado!
+[signal arg="change_scene:res://game/scenes/locations/fim_de_jogo/fim_de_jogo.tscn"]
+[end_timeline]
 label sem_credibilidade
 Juiz (bravo): Chega! Promotor, o senhor perdeu toda a credibilidade neste tribunal.
 Juiz (bravo): Sem provas convincentes, o réu é considerado humano. Caso encerrado!
 [signal arg="change_scene:res://game/scenes/locations/fim_de_jogo/fim_de_jogo.tscn"]
+[end_timeline]

@@ -1,3 +1,4 @@
+@tool
 class_name NoteInteraction
 extends Interaction
 
@@ -5,9 +6,18 @@ extends Interaction
 @export var pages: Array[NotePage] = []
 ## Esconde esta nota até o GameState ter esta flag.
 @export var required_flag: String = ""
+## Gravada quando o jogador fecha o leitor depois de abrir esta nota.
+@export var read_flag: String = ""
+
+
+func _enter_tree() -> void:
+	apply_resizable_icon()
 
 
 func _ready() -> void:
+	apply_resizable_icon()
+	if Engine.is_editor_hint():
+		return
 	super()
 	pressed.connect(_on_pressed)
 	GameState.flag_changed.connect(_on_flag_changed)
@@ -33,6 +43,16 @@ func open_note() -> void:
 		push_error("NoteInteraction: note viewer not found")
 		return
 	viewer.open(get_pages())
+	if read_flag.is_empty() or GameState.has_flag(read_flag):
+		return
+	if not viewer.closed.is_connected(_on_read_closed):
+		viewer.closed.connect(_on_read_closed, CONNECT_ONE_SHOT)
+
+
+func _on_read_closed() -> void:
+	if read_flag.is_empty():
+		return
+	GameState.set_flag(read_flag)
 
 
 func _on_flag_changed(_flag: String, _value: bool) -> void:

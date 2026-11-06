@@ -1,5 +1,16 @@
+@tool
 class_name Hotspot
 extends Interaction
+
+## Imagem deste ponto. O retângulo do controle é o quadro: arraste as bordas para escalar.
+@export var texture: Texture2D:
+	set(value):
+		texture = value
+		_adopt_texture_size()
+		apply_resizable_icon()
+		if texture != null:
+			flat = true
+		queue_redraw()
 
 ## Timeline reproduzida quando [member flag] não está definida.
 @export_file("*.dtl") var timeline: String = ""
@@ -15,11 +26,41 @@ extends Interaction
 var _used := false
 
 
+func _enter_tree() -> void:
+	apply_resizable_icon()
+	if texture != null:
+		flat = true
+	_adopt_texture_size()
+
+
 func _ready() -> void:
+	apply_resizable_icon()
+	if texture != null:
+		flat = true
+	# No editor o script só prepara a imagem. Autoloads do jogo não rodam aqui.
+	if Engine.is_editor_hint():
+		return
 	super()
 	pressed.connect(_on_pressed)
 	GameState.flag_changed.connect(_on_flag_changed)
 	refresh_state()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_DRAW and texture != null:
+		# Estica a imagem até o retângulo atual. O tamanho da textura não trava o botão.
+		draw_texture_rect(texture, Rect2(Vector2.ZERO, size), false, Color.WHITE)
+
+
+func _adopt_texture_size() -> void:
+	if texture == null or not is_inside_tree():
+		return
+	if size.x >= 1.0 and size.y >= 1.0:
+		return
+	var image_size := texture.get_size()
+	if image_size.x < 1.0 or image_size.y < 1.0:
+		return
+	size = image_size
 
 
 func refresh_state() -> void:

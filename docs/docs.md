@@ -12,7 +12,7 @@ A ordem no `project.godot` é a ordem de inicialização. Um autoload enxerga os
 
 `DialogueDirector` é o único script que chama `Dialogic.start()`.
 
-A raiz de `game.tscn` chama `SceneRouter.register_host()` com `%LocationHost`, abre `res://game/scenes/locations/office/office.tscn` e liga o botão Inventário a `InventoryPanel.toggle()`. Em `dialogue_started`, esconde o painel e desativa o botão. Em `dialogue_finished`, ativa o botão de novo.
+A raiz de `game.tscn` chama `SceneRouter.register_host()` com `%LocationHost`, abre `res://game/scenes/locations/office/office.tscn` e liga o botão Inventário a `InventoryPanel.toggle()`. O botão "Ir ao tribunal" fica no canto inferior direito e abre um `ConfirmationDialog`. "Ir" chama `SceneRouter.go_to()` com `locations/tribunal/tribunal.tscn`. "Ficar" e Esc cancelam. Ele só aparece depois que o jogador fecha o dossiê (`leu_dossie`). Em `dialogue_started`, esconde o painel, fecha a confirmação e desativa os dois botões. Em `dialogue_finished`, ativa de novo, salvo com a nota aberta. O botão some no tribunal, no veredito e no fim de jogo. No fim de jogo, as camadas `HUD`, `CredibilityLayer`, `NoteLayer` e `ToastLayer` ficam invisíveis: some o inventário, os losangos, a nota e o aviso de item. O layout do Dialogic, se ainda estiver na árvore, também some. `CanvasLayer.visible` não muda o `visible` de cada filho, então ao sair da tela o que já estava escondido continua escondido.
 
 O ponteiro do mouse é a imagem em `display/mouse_cursor/custom_image` do `project.godot`.
 
@@ -37,7 +37,7 @@ O caminho do jogo, fase por fase, está em [Fluxo do jogo](#fluxo-do-jogo), no f
 | [SceneExit](#sceneexit) | `Interaction` | Saída para outro local |
 | [ExitArrow](#exitarrow) | `SceneExit` | Seta para outro local |
 | [InventoryPanel](#inventorypanel) | `Control` | Painel do inventário |
-| [ItemToast](#itemtoast) | `PanelContainer` | Aviso de item adquirido |
+| [ItemToast](#itemtoast) | `PanelContainer` | Aviso de item ou argumento |
 | [CredibilityBar](#credibilitybar) | `Control` | Losangos de credibilidade no julgamento |
 | [SpeakerLayer](#speakerlayer) | `DialogicLayoutLayer` | Só o retrato de quem fala, e a câmera do tribunal |
 
@@ -99,6 +99,13 @@ Losangos com que o julgamento começa.
 | void | clear_flag(flag: String) |
 | void | set_credibility(value: int) |
 | void | lose_credibility(amount: int = 1) |
+| void | clear_spoken_arguments() |
+| void | speak_argument(argument_id: String) |
+| bool | can_speak(argument_id: String) |
+| bool | has_opening_argument() |
+| bool | has_apartment_argument() |
+| bool | has_proof() |
+| void | reset() |
 
 ## Sinais
 
@@ -136,6 +143,34 @@ Grava `credibility` com `value`, preso entre `0` e `MAX_CREDIBILITY`, e emite `c
 
 Equivale a `set_credibility(credibility - amount)`. A timeline chama com `[signal arg="lose_credibility:1"]`.
 
+### void clear_spoken_arguments()
+
+Apaga as flags `falou_` de cada id em `SPOKEN_ARGUMENTS`. Não mexe nas flags da investigação nem nos itens. `julgamento.dtl` chama com `do GameState.clear_spoken_arguments()` ao abrir o tribunal, então "Tentar o julgamento de novo" devolve as falas.
+
+### void speak_argument(argument_id: String)
+
+Grava `falou_` mais o id. Um id fora de `SPOKEN_ARGUMENTS` gera um aviso e não grava nada. A timeline chama com `do GameState.speak_argument("aparencia")` no começo da escolha.
+
+### bool can_speak(argument_id: String)
+
+`true` quando a fala ainda não foi dita nesta tentativa e o jogador a coletou. `aparencia` não precisa de item. As outras exigem o item ou a flag da investigação (`depoimento_porteiro`, `olho_magico`, `porta_sem_girar`, `viu_filtro`, `viu_computador`, `dobradicas`, `chave_apartamento`).
+
+### bool has_opening_argument()
+
+`true` se ainda dá para falar de aparência, do porteiro ou de alguma pista do apartamento.
+
+### bool has_apartment_argument()
+
+`true` se ainda dá para falar do olho mágico, da porta, do filtro ou da conta de luz.
+
+### bool has_proof()
+
+`true` se ainda há uma prova não apresentada contra a desculpa do olho mágico.
+
+### void reset()
+
+Apaga todas as flags e devolve `credibility` a `MAX_CREDIBILITY`. Emite `flag_changed` com `false` para cada flag que existia, e `credibility_changed`. O botão "Reiniciar o jogo" na tela de fim de jogo chama este método.
+
 ---
 
 # Inventory
@@ -167,6 +202,7 @@ Pasta varrida na inicialização. Cada item novo é um `.tres` nesta pasta.
 | Tipo de retorno | Método |
 | --- | --- |
 | bool | add(item_id: String) |
+| void | clear() |
 | bool | remove(item_id: String) |
 | bool | has(item_id: String) |
 | Array[ItemData] | get_items() |
@@ -176,7 +212,7 @@ Pasta varrida na inicialização. Cada item novo é um `.tres` nesta pasta.
 
 ### changed()
 
-Emitido depois que `add()` ou `remove()` alteram a lista do jogador. `InventoryPanel` escuta este sinal para redesenhar a lista.
+Emitido depois que `add()`, `remove()` ou `clear()` alteram a lista do jogador. `InventoryPanel` escuta este sinal para redesenhar a lista.
 
 ### item_added(item: ItemData)
 
@@ -193,6 +229,10 @@ Coloca `item_id` na lista do jogador, uma vez. Emite `changed` e `item_added`. D
 Devolve `false` quando o id está ausente do catálogo, ou quando o jogador já carrega esse item. Um id desconhecido também gera um aviso.
 
 Uma timeline entrega o item com `[signal arg="give_item:attorneys_badge"]`.
+
+### void clear()
+
+Esvazia a lista do jogador e emite `changed`. Não emite `item_added`. Se a lista já está vazia, não faz nada. O botão "Reiniciar o jogo" chama este método.
 
 ### bool remove(item_id: String)
 
@@ -389,6 +429,7 @@ Cada arquivo em `res://game/data/items/` é um recurso desta classe. `Inventory`
 | String | display_name | `""` |
 | String | description | `""` |
 | Texture2D | icon | |
+| Kind | kind | `Kind.ITEM` |
 
 ---
 
@@ -400,7 +441,7 @@ Identificador usado em `Inventory.add()`, `give_item` e `remove_item`. O jogador
 
 ### String display_name = ""
 
-Nome mostrado na lista do inventário e no aviso de item adquirido.
+Nome mostrado na lista do painel e no aviso de item ou argumento.
 
 ### String description = ""
 
@@ -409,6 +450,12 @@ Texto do detalhe, quando o jogador seleciona o item no `InventoryPanel`.
 ### Texture2D icon
 
 Ícone ao lado do nome e no detalhe. Pode ficar vazio. O painel e o aviso escondem a imagem quando o valor é `null`.
+
+### Kind kind = Kind.ITEM
+
+`ITEM` entra na aba Itens. `ARGUMENT` entra na aba Argumentos. `Inventory.has()` e o julgamento enxergam os dois do mesmo jeito.
+
+Distintivo, dossiê e chave do apartamento são `ITEM`. Olho mágico, dobradiças, porta que abriu sem girar e depoimento do porteiro são `ARGUMENT`. `office_key` fica como `ITEM`, mas nenhuma timeline entrega esse recurso.
 
 ---
 
@@ -794,13 +841,13 @@ Lado para o qual aponta a seta exibida no centro do botão durante o hover.
 
 **Cena:** `res://game/scenes/ui/inventory_panel.tscn`
 
-Painel que lista os itens do jogador.
+Painel com as abas Itens e Argumentos.
 
 ## Descrição
 
-Começa oculto. Escuta `Inventory.changed` e redesenha a lista, com o ícone ao lado de `display_name`. O ícone da lista tem tamanho fixo de 48×48.
+Começa oculto. Um [TabBar](https://docs.godotengine.org/en/stable/classes/class_tabbar.html) no cabeçalho tem as abas "Itens" e "Argumentos". `tab_changed` e `Inventory.changed` redesenham a lista da aba atual, filtrando `Inventory.get_items()` por `ItemData.kind`. O ícone da lista tem tamanho fixo de 48×48.
 
-Selecionar um item mostra `icon`, `display_name` e `description`. Com a lista vazia, o título fica "Inventário" e o texto fica "Nada aqui ainda.".
+Selecionar uma entrada mostra `icon`, `display_name` e `description`. Com a aba Itens vazia, o título fica "Itens" e o texto fica "Nada aqui ainda.". Com a aba Argumentos vazia, o título fica "Argumentos" e o texto fica "Nenhum argumento anotado.".
 
 O botão Fechar e um clique no fundo escuro chamam `hide()`.
 
@@ -816,7 +863,7 @@ O botão Fechar e um clique no fundo escuro chamam `hide()`.
 
 ### void toggle()
 
-Alterna `visible`. Ao abrir, relê `Inventory.get_items()` e seleciona o primeiro item.
+Alterna `visible`. Ao abrir, relê a aba atual e seleciona a primeira entrada dela.
 
 A cena principal liga o botão Inventário a este método. `dialogue_started` esconde o painel por `hide()`, sem passar por `toggle()`.
 
@@ -828,13 +875,13 @@ A cena principal liga o botão Inventário a este método. `dialogue_started` es
 
 **Script:** `res://game/scripts/item_toast.gd`
 
-Aviso temporário de item adquirido.
+Aviso temporário de item ou argumento.
 
 ## Descrição
 
 Começa oculto e ignora o mouse (`MOUSE_FILTER_IGNORE`). Escuta `Inventory.item_added`.
 
-Quando um item entra no inventário, mostra o `icon` e o texto "Item {display_name} adquirido". O aviso permanece 2,6 segundos e some em 0,35 segundos. Um item novo nesse intervalo reinicia a contagem e mantém o aviso visível.
+Quando uma entrada chega ao inventário, mostra o `icon`. Um `ITEM` usa o texto "Item {display_name} adquirido". Um `ARGUMENT` usa "Argumento anotado: {display_name}". O aviso permanece 2,6 segundos e some em 0,35 segundos. Uma entrada nova nesse intervalo reinicia a contagem e mantém o aviso visível.
 
 ---
 
@@ -931,7 +978,9 @@ Três fases: o caso chega, a investigação e o julgamento. O roteiro do julgame
 | Corredor | `locations/corredor/corredor.tscn` | Olho mágico (`olho_magico.dtl`) rende `olho_magico`. Tapete (`tapete.dtl`) rende `chave_apartamento`. Porta (`porta.dtl`): sem a chave, só comenta; com a chave, rende `porta_sem_girar`, grava `abriu_porta` e entra no apartamento. |
 | Apartamento | `locations/apartamento/apartamento.tscn` | Porta por dentro (`dobradicas.dtl`) rende `dobradicas`. Computador (`computador.dtl`) grava `viu_computador`. Filtro (`filtro.dtl`) grava `viu_filtro`. Os dois são pistas falsas: a fala descarta a conta de luz e a água do dossiê. |
 
-Quando o jogador tem `olho_magico` e `dobradicas`, a timeline que deu o segundo item grava `investigacao_completa`. Essa flag mostra o botão "Ir ao tribunal" no corredor e no apartamento.
+O dossiê na mesa só abre com `pegou_dossie`. Ao fechar o leitor, a nota grava `leu_dossie`. Aí o botão "Ir ao tribunal" aparece no canto inferior direito, no escritório, na portaria, no corredor e no apartamento. O clique abre a confirmação. "Ir" muda para o tribunal. "Ficar" e Esc ficam na investigação. O botão some no tribunal, no veredito e no fim de jogo, e fica desligado durante diálogo e nota. No fim de jogo o restante do HUD também some.
+
+Quando o jogador tem `olho_magico` e `dobradicas`, a timeline que deu o segundo item grava `investigacao_completa` e o Péricles avisa que já dá para acusar. A flag não trava a viagem.
 
 ## Fase 3: julgamento
 
@@ -939,13 +988,15 @@ Quando o jogador tem `olho_magico` e `dobradicas`, a timeline que deu o segundo 
 
 | Escolha | Resultado |
 | --- | --- |
-| Aparência do suspeito | Perde 1 losango e volta aos argumentos |
-| Testemunha | Perde 1 losango e volta aos argumentos. Cita a Dona Rosinha. Se o jogador viu o computador, Péricles admite que a placa está inteira |
-| Investigação, a porta abriu sem girar a chave | Perde 1 losango e volta às provas do apartamento. Se houver depoimento, o juiz lembra a porta entreaberta da Rosinha |
-| Investigação, filtro empoeirado | Só aparece com `viu_filtro`. Perde 1 losango e volta às provas do apartamento |
-| Investigação, conta de luz | Só aparece com `viu_computador`. Perde 1 losango e volta às provas do apartamento |
-| Investigação, olho mágico | O réu se defende e o jogador apresenta uma prova |
-| Prova: dobradiças da porta | Vence: veredito em `locations/veredito/veredito.tscn` |
-| Qualquer outra prova | Perde 1 losango e pergunta de novo |
+| Aparência do suspeito | Uma vez. Perde 1 losango e volta aos argumentos |
+| Testemunha | Uma vez, e só com `depoimento_porteiro`. Perde 1 losango e volta aos argumentos. Cita a Dona Rosinha. Se o jogador viu o computador, Péricles admite que a placa está inteira |
+| Investigação | Enquanto restar pista não falada: `olho_magico`, `porta_sem_girar`, `viu_filtro` ou `viu_computador`. Sem `abriu_porta`, o Péricles não diz que entrou no apartamento |
+| Investigação, a porta abriu sem girar a chave | Uma vez, e só com `porta_sem_girar`. Perde 1 losango. Se ainda houver pista do apartamento, volta a elas; senão, volta aos argumentos. Se houver depoimento, o juiz lembra a porta entreaberta da Rosinha |
+| Investigação, filtro empoeirado | Uma vez, e só com `viu_filtro`. Perde 1 losango e segue a mesma volta da porta |
+| Investigação, conta de luz | Uma vez, e só com `viu_computador`. Perde 1 losango e segue a mesma volta da porta |
+| Investigação, olho mágico | Uma vez, e só com `olho_magico`. O réu se defende e o jogador apresenta uma prova |
+| Não tenho mais nada, Meritíssimo | Só aparece quando não resta argumento de abertura. Encerra o caso em `locations/fim_de_jogo/fim_de_jogo.tscn` e a timeline para. Não toca a fala de credibilidade |
+| Prova: dobradiças da porta | Uma vez, e só com `dobradicas`. Vence: veredito em `locations/veredito/veredito.tscn` |
+| Qualquer outra prova | Uma vez, se o jogador tiver o item. O juiz recusa e o caso acaba na mesma derrota de "não tenho mais nada", sem tirar losango e sem a fala de credibilidade |
 
-Sem losangos, a timeline pula para `sem_credibilidade` e vai para `locations/fim_de_jogo/fim_de_jogo.tscn`. O botão "Tentar o julgamento de novo" volta ao tribunal com 5 losangos; os itens continuam no inventário.
+Sem losangos, a timeline pula para `sem_credibilidade` e vai para `locations/fim_de_jogo/fim_de_jogo.tscn`. Nessa tela o HUD some. O botão "Tentar o julgamento de novo" volta ao tribunal com 5 losangos e com as falas liberadas de novo; os itens continuam no inventário. O botão "Reiniciar o jogo" apaga flags e itens e abre o escritório de novo.

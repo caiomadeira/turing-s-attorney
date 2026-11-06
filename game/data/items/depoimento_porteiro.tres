@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("2_item")
 id = "depoimento_porteiro"
+kind = 1
 display_name = "Depoimento do porteiro"
 description = "Primeiro o porteiro disse que não sabia de nada. Depois de pressionado, contou que viu o Sr. BERT devorar uma placa de vídeo inteira."
 icon = ExtResource("1_icon")

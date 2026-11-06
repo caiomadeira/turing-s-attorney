@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://sqisom7qbg0p" path="res://game/scripts/hotspot.gd" id="3_hotspot"]
 [ext_resource type="Texture2D" uid="uid://ldftq0bewmhk" path="res://assets/kenney_cursor-pack/PNG/Outline/Default/gauntlet_open.png" id="4_hand"]
 [ext_resource type="Script" uid="uid://nvjkgra5sq1n" path="res://game/scripts/exit_arrow.gd" id="5_arrow"]
-[ext_resource type="Script" uid="uid://xovcehd60trc" path="res://game/scripts/scene_exit.gd" id="6_exit"]
 
 [node name="Corredor" type="Control"]
 layout_mode = 3
@@ -81,23 +80,3 @@ flag = "pegou_chave"
 icon_texture = ExtResource("4_hand")
 proportions = Vector2(32, 32)
 hotspot = Vector2(9, 4)
-
-[node name="ToTribunal" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -264.0
-offset_top = -84.0
-offset_right = -24.0
-offset_bottom = -24.0
-grow_horizontal = 0
-grow_vertical = 0
-focus_mode = 0
-theme_override_font_sizes/font_size = 24
-text = "Ir ao tribunal"
-script = ExtResource("6_exit")
-target_scene = "res://game/scenes/locations/tribunal/tribunal.tscn"
-required_flag = "investigacao_completa"

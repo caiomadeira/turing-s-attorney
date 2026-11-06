@@ -27,6 +27,13 @@ func add(item_id: String) -> bool:
 	return true
 
 
+func clear() -> void:
+	if _owned.is_empty():
+		return
+	_owned.clear()
+	changed.emit()
+
+
 func remove(item_id: String) -> bool:
 	var index := _owned.find(item_id)
 	if index == -1:

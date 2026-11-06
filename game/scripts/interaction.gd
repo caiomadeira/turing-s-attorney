@@ -20,6 +20,25 @@ func _ready() -> void:
 	mouse_exited.connect(_set_hovered.bind(false))
 
 
+## O ícone do Button, com expand_icon, encolhe junto com o controle.
+## Sem isso, o tamanho mínimo fica preso ao tamanho da textura.
+func apply_resizable_icon() -> void:
+	expand_icon = true
+	icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
+	for color_name in [
+		&"icon_normal_color",
+		&"icon_hover_color",
+		&"icon_pressed_color",
+		&"icon_hover_pressed_color",
+		&"icon_disabled_color",
+		&"icon_focus_color",
+	]:
+		add_theme_color_override(color_name, Color.WHITE)
+	if icon != null:
+		flat = true
+
+
 func _set_hovered(value: bool) -> void:
 	_hovered = value
 	_update_cursor()

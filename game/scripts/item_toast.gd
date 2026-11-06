@@ -55,7 +55,10 @@ func _show_next() -> void:
 	var item: ItemData = _queue.pop_front()
 	%Icon.texture = item.icon
 	%Icon.visible = item.icon != null
-	%Message.text = "Item %s adquirido" % item.display_name
+	if item.kind == ItemData.Kind.ARGUMENT:
+		%Message.text = "Argumento anotado: %s" % item.display_name
+	else:
+		%Message.text = "Item %s adquirido" % item.display_name
 	modulate.a = 1.0
 	show()
 	_hide_token += 1

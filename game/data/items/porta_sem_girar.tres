@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("2_item")
 id = "porta_sem_girar"
+kind = 1
 display_name = "Porta que abriu sem girar a chave"
 description = "Ao usar a chave, a porta do apartamento 12 simplesmente abriu, sem precisar girar a chave."
 icon = ExtResource("1_icon")

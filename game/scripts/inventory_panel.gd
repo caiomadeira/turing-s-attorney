@@ -7,6 +7,12 @@ func _ready() -> void:
 	%CloseButton.mouse_default_cursor_shape = Control.CURSOR_ARROW
 	%ItemList.mouse_default_cursor_shape = Control.CURSOR_ARROW
 	%Dimmer.mouse_default_cursor_shape = Control.CURSOR_ARROW
+	var tabs := %Tabs as TabBar
+	tabs.mouse_default_cursor_shape = Control.CURSOR_ARROW
+	tabs.clear_tabs()
+	tabs.add_tab("Itens")
+	tabs.add_tab("Argumentos")
+	tabs.tab_changed.connect(_on_tab_changed)
 	%CloseButton.pressed.connect(hide)
 	%Dimmer.gui_input.connect(_on_dimmer_input)
 	%ItemList.item_selected.connect(_on_item_selected)
@@ -21,10 +27,22 @@ func toggle() -> void:
 		_refresh()
 
 
+func _on_tab_changed(_tab: int) -> void:
+	_refresh()
+
+
+func _selected_kind() -> ItemData.Kind:
+	return ItemData.Kind.ARGUMENT if (%Tabs as TabBar).current_tab == 1 else ItemData.Kind.ITEM
+
+
 func _refresh() -> void:
 	if not is_node_ready():
 		return
-	var items := Inventory.get_items()
+	var kind := _selected_kind()
+	var items: Array[ItemData] = []
+	for item in Inventory.get_items():
+		if item.kind == kind:
+			items.append(item)
 	var item_list := %ItemList as ItemList
 	item_list.clear()
 	for item in items:
@@ -33,8 +51,8 @@ func _refresh() -> void:
 	if items.is_empty():
 		%ItemIcon.texture = null
 		%ItemIcon.hide()
-		%NameLabel.text = "Inventário"
-		%DescriptionLabel.text = "Nada aqui ainda."
+		%NameLabel.text = "Argumentos" if kind == ItemData.Kind.ARGUMENT else "Itens"
+		%DescriptionLabel.text = "Nenhum argumento anotado." if kind == ItemData.Kind.ARGUMENT else "Nada aqui ainda."
 		return
 	%ItemList.select(0)
 	_show_item(items[0])

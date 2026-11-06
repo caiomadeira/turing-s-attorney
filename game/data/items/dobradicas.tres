@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("2_item")
 id = "dobradicas"
+kind = 1
 display_name = "Dobradiças da porta"
 description = "As dobradiças da porta do apartamento 12 ficam do lado de dentro, como em todas as portas do prédio. A porta foi instalada do jeito certo."
 icon = ExtResource("1_icon")

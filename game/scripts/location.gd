@@ -40,6 +40,10 @@ func _refresh_input() -> void:
 			node.disabled = true
 			if node.has_method("_update_cursor"):
 				node._update_cursor()
+	# TextureRect não é botão. O refresh dele trata diálogo e nota sozinho.
+	for node in find_children("*", "TextureRect", true, false):
+		if node.has_method("refresh_state"):
+			node.refresh_state()
 
 
 static func is_input_locked(tree: SceneTree) -> bool:
